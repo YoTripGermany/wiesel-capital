@@ -138,27 +138,6 @@ img {
   background-clip: text;
 }
 
-.label {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 18px;
-}
-.label::before {
-  content: '';
-  width: 24px;
-  height: 1px;
-  background: var(--gold);
-}
-.label--center {
-  justify-content: center;
-}
-
 .fade {
   opacity: 0;
   transform: translateY(32px);
@@ -277,13 +256,13 @@ nav.scrolled .nav-bg {
 .logo { text-decoration: none; display: inline-flex; align-items: center; }
 .logo-img {
   display: block;
-  height: 38px;
+  height: 32px;
   width: auto;
   position: relative;
   top: 3px;
   transition: height .3s var(--ease), top .3s var(--ease);
 }
-nav.scrolled .logo-img { height: 32px; top: 2px; }
+nav.scrolled .logo-img { height: 27px; top: 2px; }
 
 .nav-links {
   display: flex;
@@ -857,30 +836,6 @@ nav.scrolled .logo-img { height: 32px; top: 2px; }
 .sec-sub.light { color: var(--tl); }
 
 
-/* ── PAGE HEADER (subpages) ── */
-
-.page-header {
-  background: #18271b;
-  padding: 168px 0 64px;
-}
-.page-header h1 {
-  font-family: var(--fd);
-  font-size: clamp(38px, 5.2vw, 60px);
-  font-weight: 400;
-  line-height: 1.08;
-  color: var(--cream);
-  margin-bottom: 18px;
-}
-.page-header h1 em { font-style: italic; color: var(--gl); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.page-header p {
-  font-size: 17px;
-  font-weight: 300;
-  color: var(--tl);
-  max-width: 600px;
-  line-height: 1.75;
-}
-
-
 /* ── 11. THREE PILLARS ── */
 
 .pillars {
@@ -945,6 +900,7 @@ nav.scrolled .logo-img { height: 32px; top: 2px; }
   font-weight: 400;
   color: var(--text-p);
   line-height: 1.75;
+  min-height: 98px;
 }
 
 
@@ -1135,45 +1091,6 @@ nav.scrolled .logo-img { height: 32px; top: 2px; }
   font-weight: 300;
   color: var(--tm);
   line-height: 1.85;
-}
-
-
-/* ── 16. CTA BAND ── */
-
-.cta-band {
-  padding: 56px 0;
-  background: linear-gradient(135deg, #18271b 0%, #1f3523 100%);
-  border-top: 1px solid rgba(184,144,42,.2);
-  border-bottom: 1px solid rgba(184,144,42,.2);
-  text-align: center;
-}
-.cta-band-small {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .22em;
-  text-transform: uppercase;
-  color: var(--gl);
-  margin-bottom: 20px;
-}
-.cta-band-h {
-  font-family: var(--fd);
-  font-size: clamp(26px, 3vw, 42px);
-  font-weight: 300;
-  color: #f8f3ea;
-  margin-bottom: 28px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.2;
-}
-.cta-band-h em { font-style: italic; color: var(--gl); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.cta-band-sub {
-  font-size: 14px;
-  font-weight: 300;
-  color: rgba(200,192,170,.75);
-  max-width: 560px;
-  margin: 0 auto 36px;
-  line-height: 1.8;
 }
 
 
@@ -1548,6 +1465,7 @@ nav.scrolled .logo-img { height: 32px; top: 2px; }
   margin-bottom: 16px;
   line-height: 1.2;
 }
+.perf-h2 em { font-style: italic; color: var(--gl); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .perf-p {
   font-family: var(--fh);
   font-size: 15px;
@@ -1565,6 +1483,18 @@ nav.scrolled .logo-img { height: 32px; top: 2px; }
   grid-template-columns: 1fr 1fr;
   gap: 80px;
   align-items: center;
+  min-height: 480px;
+  position: relative;
+}
+.blueprint-grid::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, transparent, var(--gold) 10%, var(--gold) 90%, transparent);
 }
 .blueprint-img {
   width: 100%;
@@ -1579,6 +1509,7 @@ nav.scrolled .logo-img { height: 32px; top: 2px; }
   line-height: 1.2;
 }
 .blueprint-h2 em { font-style: normal; color: var(--gold); background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.blueprint-h2 em.gold-solid { color: var(--gold); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .blueprint-p {
   font-family: var(--fh);
   font-size: 14px;
@@ -1961,7 +1892,7 @@ footer {
 .footer-brand { max-width: 260px; flex-shrink: 0; }
 .footer-logo-img {
   display: block;
-  height: 38px;
+  height: 32px;
   width: auto;
   margin-bottom: 16px;
 }
@@ -2142,6 +2073,7 @@ footer {
     grid-template-columns: 1fr;
     gap: 48px;
   }
+  .blueprint-grid::before { display: none; }
   .hero-left { flex-basis: 560px; }
   .hero-right { flex: 0 0 280px; width: 280px; }
 }
@@ -2512,7 +2444,8 @@ body.page-home { background: var(--canvas); }
 .sec-head .sec-h2 em { font-style: normal; color: var(--gold); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .panel--cream .sec-head .sec-h2 em,
 .sec-dark .sec-head .sec-h2 em,
-.sec-light .sec-head .sec-h2 em { background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; }
+.sec-light .sec-head .sec-h2 em,
+.zsm-need-sec .sec-head .sec-h2 em { background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; }
 .sec-head .sec-sub {
   margin-top: 14px;
   font-size: 16px;
@@ -3092,6 +3025,16 @@ body.page-home { background: var(--canvas); }
   margin: 32px auto 0;
   text-align: center;
 }
+#faq .faq-category {
+  font-family: var(--fh);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 44px 0 16px;
+}
+#faq .faq-category:first-child { margin-top: 0; }
 
 /* -- 42.12 FINAL CTA -- */
 #contact { position: relative; overflow: hidden; }
@@ -3798,14 +3741,14 @@ body.page-home { background: var(--canvas); }
 /* ── 47. INVESTMENT PAGES (Mentoring / Strategie / Zusammenarbeit / FAQ) ──
    Bringing these four in line with the homepage/Über-uns type system:
    var(--fh) everywhere, non-italic gold em, reused final-cta closer. */
-#faq-hero h1 { font-family: var(--fh); font-weight: 700; }
-#faq-hero h1 em { font-style: normal; }
 #faq-final-cta { position: relative; overflow: hidden; }
 #faq-final-cta .panel { padding: 72px 0; }
 #faq-final-cta .container { position: relative; z-index: 1; }
 
-#zusammenarbeit-hero h1 { font-family: var(--fh); font-weight: 700; }
-#zusammenarbeit-hero h1 em { font-style: normal; }
+#erfolgsgeschichten-final-cta { position: relative; overflow: hidden; }
+#erfolgsgeschichten-final-cta .panel { padding: 72px 0; }
+#erfolgsgeschichten-final-cta .container { position: relative; z-index: 1; }
+
 #zusammenarbeit-final-cta { position: relative; overflow: hidden; }
 #zusammenarbeit-final-cta .panel { padding: 72px 0; }
 #zusammenarbeit-final-cta .container { position: relative; z-index: 1; }
@@ -3852,8 +3795,9 @@ body.page-home { background: var(--canvas); }
 }
 
 /* -- Problem / recognition list: numbered, staggered fade-in, compact -- */
-.mkt-problem-sec { background: #ffffff; padding: 78px 0 72px; }
-.mkt-problem-sec .sec-head { margin-bottom: 30px; }
+.mkt-problem-sec { background: #ffffff; padding: 78px 0; }
+.mkt-problem-sec .sec-head { max-width: 880px; margin-bottom: 34px; }
+.mkt-problem-sec .sec-h2 { font-size: clamp(26px, 3.1vw, 38px); }
 .mkt-problem-sec .sec-h2 em { background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; }
 .mkt-problem-list {
   counter-reset: mktproblem;
@@ -3866,8 +3810,9 @@ body.page-home { background: var(--canvas); }
 }
 .mkt-problem-list li {
   counter-increment: mktproblem;
-  position: relative;
-  padding-left: 38px;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
   font-family: var(--fh);
   font-size: 15.5px;
   font-weight: 400;
@@ -3876,9 +3821,7 @@ body.page-home { background: var(--canvas); }
 }
 .mkt-problem-list li::before {
   content: counter(mktproblem, decimal-leading-zero);
-  position: absolute;
-  left: 0;
-  top: 0;
+  flex-shrink: 0;
   font-family: var(--fh);
   font-size: 12px;
   font-weight: 700;
@@ -3892,6 +3835,7 @@ body.page-home { background: var(--canvas); }
   font-weight: 700;
   color: var(--text-h);
 }
+.mkt-problem-close em { font-style: normal; color: var(--gold); background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .mkt-problem-close-sub {
   font-family: var(--fh);
   font-size: 15px;
@@ -3900,16 +3844,41 @@ body.page-home { background: var(--canvas); }
   margin-top: 6px;
 }
 
-/* -- What is the mentoring: 3 steps -- */
+/* -- What is the mentoring: 3 steps, restored as the site's standard
+   white "Wiesel Capital" card with the gold gradient top line -- */
 .mkt-what-sec { background: #18271b; padding: 96px 0; }
+.mkt-what-sec .sec-head { max-width: 900px; }
+.mkt-what-sec .sec-h2 { font-size: clamp(26px, 3vw, 38px); }
 .mkt-steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 48px;
+  gap: 28px;
   max-width: 980px;
   margin: 0 auto;
 }
-.mkt-step { text-align: center; }
+.mkt-step {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid rgba(184,144,42,.2);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 14px 34px rgba(0,0,0,.22);
+  padding: 40px 30px 34px;
+  text-align: center;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s;
+}
+.mkt-step::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold-text-gradient-cream);
+}
+.mkt-step:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 22px 48px rgba(0,0,0,.3);
+  border-color: rgba(184,144,42,.4);
+}
 .mkt-step-num {
   font-family: var(--fh);
   font-size: 13px;
@@ -3922,19 +3891,19 @@ body.page-home { background: var(--canvas); }
   font-family: var(--fh);
   font-size: 22px;
   font-weight: 700;
-  color: var(--cream);
+  color: var(--text-h);
   margin-bottom: 10px;
 }
 .mkt-step-p {
   font-family: var(--fh);
   font-size: 14.5px;
   font-weight: 400;
-  color: var(--tl);
+  color: var(--text-p);
   line-height: 1.7;
 }
 
 /* -- What you get: 4 feature blocks, numbered like the steps above -- */
-.mkt-features-sec { background: #ffffff; padding: 120px 0 56px; }
+.mkt-features-sec { background: #ffffff; padding: 68px 0 60px; }
 .mkt-features-sec .sec-h2 em { background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; }
 .mkt-features {
   display: grid;
@@ -3976,10 +3945,13 @@ body.page-home { background: var(--canvas); }
 .mkt-trust-sec { background: #ffffff; padding: 88px 0; }
 #mentoring-trust .founder-h { color: var(--text-h); }
 #mentoring-trust .founder-h em { background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; }
-#mentoring-trust .founder-p { color: var(--text-p); }
+#mentoring-trust .founder-p { color: var(--text-p); max-width: 520px; }
+#mentoring-trust .founder-p strong { color: var(--text-h); font-weight: 700; }
 #mentoring-trust .founder-stat-num { color: var(--text-h); }
 #mentoring-trust .founder-stat-label { color: var(--text-m); }
 #mentoring-trust .founder-photo-wrap { box-shadow: 0 24px 60px rgba(24,39,27,.14); }
+#mentoring-trust .founder-shell { align-items: center; }
+#mentoring-trust .founder-content { padding-top: 0; }
 
 /* -- Für wen (fit / not-a-fit) -- */
 .mkt-fit-sec { background: var(--cm); padding: 96px 0; }
@@ -3995,20 +3967,20 @@ body.page-home { background: var(--canvas); }
   line-height: 1.7;
 }
 
-/* -- Final CTA microcopy (final-cta-* reused from the homepage pattern) -- */
-.mkt-final-microcopy {
+/* -- Final CTA: large kicker line instead of the small eyebrow -- */
+.mkt-cta-kicker {
   font-family: var(--fh);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--tm);
-  margin-top: 22px;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 700;
+  color: var(--cream);
+  margin-bottom: 14px;
 }
+.mkt-cta-kicker em { font-style: normal; color: var(--gold); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 #mentoring-final-cta .panel { padding: 60px 0; }
-#mentoring-final-cta .eyebrow { justify-content: center; }
 #mentoring-final-cta .final-cta-face img { opacity: .78; filter: grayscale(1) brightness(.62) contrast(.95); }
 
 /* -- Strategy hand-off: editorial "next chapter" teaser card -- */
-.mkt-next-sec { background: var(--cm); padding: 88px 0 96px; }
+.mkt-next-sec { background: #ffffff; padding: 88px 0 96px; }
 .mkt-next-card {
   position: relative;
   overflow: hidden;
@@ -4073,13 +4045,188 @@ body.page-home { background: var(--canvas); }
 }
 @media (max-width: 768px) {
   .mkt-hero { padding: 168px 0 64px; }
-  .mkt-problem-sec { padding: 64px 0 56px; }
+  .mkt-problem-sec { padding: 64px 0; }
   .mkt-what-sec,
   .mkt-compare-sec,
   .mkt-fit-sec { padding: 64px 0; }
-  .mkt-features-sec { padding: 72px 0 48px; }
+  .mkt-features-sec { padding: 56px 0 48px; }
   .mkt-trust-sec { padding: 56px 0; }
   .mkt-next-sec { padding: 56px 0 64px; }
+}
+
+
+/* ============================================================
+   49. STRATEGIE PAGE — REDESIGN
+   ============================================================ */
+
+/* -- Pillars: small gold tag instead of the big pale number, plus an outcome line -- */
+.pillar-tag {
+  display: block;
+  font-family: var(--fh);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.pillar { display: flex; flex-direction: column; }
+.pillar-h { min-height: 58px; }
+.pillar-outcome {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(184,144,42,.12);
+  font-family: var(--fh);
+  font-style: italic;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--text-m);
+  line-height: 1.6;
+}
+
+/* -- Performance stats: one flat info area, 2x2 grid with hairline dividers -- */
+.perf-kpi-col--grid { display: grid; grid-template-columns: 1fr 1fr; }
+.perf-kpi-col--grid .perf-kpi-card { border-top: none; padding: 26px 24px; }
+.perf-kpi-col--grid .perf-kpi-card:nth-child(-n+2) { border-bottom: 1px solid rgba(184,144,42,.14); }
+.perf-kpi-col--grid .perf-kpi-card:nth-child(odd)  { border-right: 1px solid rgba(184,144,42,.14); }
+
+.strat-perf-close { max-width: 640px; margin: 44px auto 0; text-align: center; }
+.strat-perf-close .perf-h2 { margin-bottom: 14px; }
+.strat-perf-close .perf-p  { margin: 0 auto 24px; max-width: 560px; }
+.chart-caption--inline { text-align: left; margin-top: 18px; }
+
+/* -- Blueprint heading, light variant for dark backgrounds -- */
+.blueprint-h2.light { color: var(--cream); }
+.blueprint-h2.light em { background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; }
+
+/* -- Donut: "Potenzielle Vermögensstruktur" -- */
+.donut-wrap { text-align: center; }
+.donut-title { font-family: var(--fh); font-size: clamp(26px, 2.8vw, 38px); font-weight: 700; color: var(--text-h); line-height: 1.2; margin-bottom: 32px; }
+.donut-title em { font-style: normal; color: var(--gold); background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.donut-chart-area { position: relative; width: min(260px, 60vw); margin: 0 auto; }
+.donut-svg { width: 100%; height: auto; transform: rotate(-90deg); overflow: visible; }
+.donut-track { fill: none; stroke: rgba(184,144,42,.1); stroke-width: 26; }
+.donut-seg {
+  fill: none;
+  stroke-width: 26;
+  cursor: pointer;
+  opacity: 0;
+  transition: stroke-width .25s var(--ease), filter .25s var(--ease), opacity .9s var(--ease) var(--seg-delay, 0s);
+}
+.donut-seg:hover, .donut-seg:focus-visible, .donut-seg.seg-active { stroke-width: 32; filter: brightness(1.15); outline: none; }
+.donut-wrap.in-view .donut-seg { opacity: 1; }
+.donut-seg--1 { stroke: #f3e6bd; --seg-delay: .05s; }
+.donut-seg--2 { stroke: #e2c97e; --seg-delay: .2s; }
+.donut-seg--3 { stroke: #c9a84c; --seg-delay: .35s; }
+.donut-seg--4 { stroke: #b8902a; --seg-delay: .5s; }
+.donut-seg--5 { stroke: #8a6b1f; --seg-delay: .65s; }
+.donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.donut-center-pct { font-family: var(--fh); font-size: 32px; font-weight: 800; color: var(--gold); background: var(--gold-text-gradient-cream); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1; }
+.donut-center-lbl { font-family: var(--fh); font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-top: 6px; }
+.donut-detail { max-width: 380px; margin: 32px auto 0; min-height: 110px; }
+.donut-detail-name { display: block; font-family: var(--fh); font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+.donut-detail-p { font-family: var(--fh); font-size: 14px; color: var(--text-p); line-height: 1.85; min-height: 72px; }
+
+/* -- Risk section: full dark-green panel, text left, interactive loss calculator right -- */
+.risk-sec { background: #18271b; padding: var(--sec-pad-desktop) 0; }
+.risk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.risk-p { font-family: var(--fh); font-size: 14px; font-weight: 400; color: var(--tl); line-height: 1.85; margin-bottom: 24px; }
+.risk-p strong { color: var(--cream); font-weight: 600; }
+
+.risk-hedge-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.risk-hedge-list li { font-family: var(--fh); font-size: 14px; font-weight: 500; color: var(--cream); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+.risk-hedge-list li svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 3px; color: var(--gold); }
+
+.risk-calc { background: #10190f; border: 1px solid rgba(201,168,76,.16); border-radius: var(--radius-xl); padding: 36px 34px; }
+.risk-calc-title { font-family: var(--fh); font-size: clamp(20px, 2.2vw, 26px); font-weight: 800; color: var(--cream); line-height: 1.25; margin-bottom: 24px; }
+.risk-calc-title em { font-style: normal; color: var(--gold); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.risk-calc-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; font-family: var(--fh); font-size: 13px; color: var(--tl); }
+.risk-calc-loss-pct { font-size: 20px; font-weight: 700; color: #f0a8a8; }
+input#riskSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(201,168,76,.22);
+  outline: none;
+  margin-bottom: 8px;
+}
+input#riskSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f3e6bd 0%, #d9b768 45%, #b8902a 100%);
+  border: 2px solid #10190f;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+input#riskSlider::-moz-range-thumb {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f3e6bd 0%, #d9b768 45%, #b8902a 100%);
+  border: 2px solid #10190f;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4);
+}
+.risk-calc-figures { margin: 26px 0 20px; padding: 22px 0; border-top: 1px solid rgba(201,168,76,.14); border-bottom: 1px solid rgba(201,168,76,.14); display: flex; flex-direction: column; gap: 16px; }
+.risk-calc-figure { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.risk-calc-figure-lbl { font-family: var(--fh); font-size: 13px; color: var(--tl); }
+.risk-calc-figure-val { font-family: var(--fh); font-size: 16px; font-weight: 600; color: var(--cream); }
+.risk-calc-figure-val--gold { font-size: 24px; font-weight: 800; color: var(--gl); }
+.risk-calc-note { font-family: var(--fh); font-size: 14px; font-weight: 500; color: var(--cream); line-height: 1.6; margin-bottom: 16px; }
+.risk-calc-disclaimer { font-family: var(--fh); font-size: 10px; color: var(--tm); line-height: 1.6; }
+
+@media (max-width: 1024px) {
+  .risk-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 768px) {
+  .risk-sec { padding: 48px 0; }
+  .risk-calc { padding: 30px 24px; }
+}
+
+
+/* ============================================================
+   50. ZUSAMMENARBEIT PAGE — REDESIGN
+   ============================================================ */
+
+/* -- Ablauf: reuses .finn-timeline-sec / .finn-timeline-* verbatim (see
+   section 44) for a pixel-identical timeline — only the heading spacing
+   is scoped here, same as #finn-timeline's own override. -- */
+#zsm-timeline .sec-head { margin-bottom: 96px; }
+
+/* -- Benefits ("Was bedeutet das für Sie") + requirements ("Was wir von
+   Ihnen brauchen"): a plain checkmark list, no cards — reused on both a
+   dark and a light section via a color modifier. -- */
+.zsm-benefits-sec { background: #18271b; padding: var(--sec-pad-desktop) 0; }
+.zsm-need-sec { background: #ffffff; padding: var(--sec-pad-desktop) 0; }
+
+.check-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.check-list li {
+  font-family: var(--fh);
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  line-height: 1.55;
+}
+.check-list li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--gold); }
+.check-list--on-dark li  { color: var(--cream); }
+.check-list--on-light li { color: var(--text-p); }
+
+@media (max-width: 768px) {
+  #zsm-timeline .sec-head { margin-bottom: 64px; }
+  .zsm-benefits-sec, .zsm-need-sec { padding: 56px 0; }
 }
 
 

@@ -523,3 +523,107 @@ document.addEventListener('keydown', e => {
   }
   update();
 })();
+
+
+/* ── 17. STRATEGIE — ASSET-ALLOCATION DONUT (auto-cycling detail + reveal-in-view) ──
+   The ring continuously advances through its five segments on its own; hovering
+   or focusing a segment interrupts the cycle and shows that segment instead,
+   resuming automatic cycling once the pointer leaves. */
+(function () {
+  const wrap   = document.querySelector('.donut-wrap');
+  const svg    = document.querySelector('.donut-svg');
+  const nameEl = document.getElementById('donutDetailName');
+  const pEl    = document.getElementById('donutDetailP');
+  if (!wrap || !svg || !nameEl || !pEl) return;
+
+  const ORDER = ['wachstum', 'stabilitaet', 'liquiditaet', 'diversifikation', 'absicherung'];
+  const DATA = {
+    wachstum:        ['Wachstum',        'Dieser Baustein liefert das langfristige Renditepotenzial des Depots, etwa über Aktien und unternehmerische Beteiligungen.'],
+    stabilitaet:     ['Stabilität',      'Dieser Baustein soll Schwankungen im Gesamtportfolio reduzieren und Abhängigkeiten von einzelnen Marktphasen begrenzen.'],
+    liquiditaet:     ['Liquidität',      'Die strategische Reserve hält das Depot handlungsfähig, um Chancen zu nutzen oder kurzfristigen Bedarf zu decken.'],
+    diversifikation: ['Diversifikation', 'Alternative Renditequellen reduzieren die Abhängigkeit von einzelnen Märkten oder Anlageklassen.'],
+    absicherung:     ['Absicherung',     'Klare Regeln zum Risikomanagement begrenzen Verluste, bevor sie das Depot spürbar belasten.']
+  };
+
+  const segs = svg.querySelectorAll('.donut-seg');
+  let cycleIndex = 0;
+  let cycleTimer = null;
+
+  function setActive(key) {
+    const d = DATA[key];
+    if (!d) return;
+    nameEl.textContent = d[0];
+    pEl.textContent    = d[1];
+    segs.forEach(s => s.classList.toggle('seg-active', s.dataset.key === key));
+  }
+
+  function startCycle() {
+    if (reducedMotion || cycleTimer) return;
+    cycleTimer = setInterval(() => {
+      cycleIndex = (cycleIndex + 1) % ORDER.length;
+      setActive(ORDER[cycleIndex]);
+    }, 2600);
+  }
+  function stopCycle() {
+    if (cycleTimer) { clearInterval(cycleTimer); cycleTimer = null; }
+  }
+
+  segs.forEach(seg => {
+    const key = seg.dataset.key;
+    seg.addEventListener('mouseenter', () => { stopCycle(); setActive(key); });
+    seg.addEventListener('focus',      () => { stopCycle(); setActive(key); });
+    seg.addEventListener('click',      () => { stopCycle(); setActive(key); });
+  });
+  wrap.addEventListener('mouseleave', startCycle);
+
+  setActive(ORDER[0]);
+
+  if (reducedMotion) {
+    wrap.classList.add('in-view');
+    return;
+  }
+
+  const donutObserver = new IntersectionObserver(entries => entries.forEach(e => {
+    if (e.isIntersecting) {
+      wrap.classList.add('in-view');
+      startCycle();
+      donutObserver.disconnect();
+    }
+  }), { threshold: 0.3 });
+  donutObserver.observe(wrap);
+})();
+
+
+/* ── 18. STRATEGIE — VERLUST-RECHNER (interaktiver Slider) ──
+   Zeigt live, welche prozentuale Erholung nach einem Depotverlust
+   nötig ist: recovery% = loss% / (100 - loss%) * 100. */
+(function () {
+  const slider = document.getElementById('riskSlider');
+  if (!slider) return;
+
+  const lossPctEl  = document.getElementById('riskLossPct');
+  const startEl    = document.getElementById('riskStart');
+  const afterEl    = document.getElementById('riskAfter');
+  const recoveryEl = document.getElementById('riskRecoveryPct');
+  const noteEl     = document.getElementById('riskCalcNote');
+  const START      = 100000;
+
+  const fmtEUR = n => Math.round(n).toLocaleString('de-DE') + ' €';
+  const fmtPct1 = n => n.toLocaleString('de-DE', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+  function update() {
+    const pct      = +slider.value;
+    const after    = START * (1 - pct / 100);
+    const recovery = pct / (100 - pct) * 100;
+
+    slider.setAttribute('aria-valuenow', String(pct));
+    lossPctEl.textContent  = '−' + pct + ' %';
+    startEl.textContent    = fmtEUR(START);
+    afterEl.textContent    = fmtEUR(after);
+    recoveryEl.textContent = '+' + fmtPct1(recovery) + ' %';
+    noteEl.textContent     = '−' + pct + ' % Verlust bedeuten: +' + fmtPct1(recovery) + ' % Gewinn sind nötig, nur um wieder beim Ausgangspunkt zu sein.';
+  }
+
+  slider.addEventListener('input', update);
+  update();
+})();
