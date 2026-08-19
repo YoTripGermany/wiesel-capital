@@ -5,9 +5,8 @@
    2. Mobile menu toggle
    3. Scroll-triggered fade animations
    4. Counter animations
-   5. Hedging chart (canvas)
-   6. FAQ accordion
-   7. Smooth scroll for anchor links
+   5. FAQ accordion
+   6. Smooth scroll for anchor links
    ============================================================ */
 
 
@@ -17,6 +16,20 @@ const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 60);
 });
+
+/* Team-page hero photo/overlay (see .team-hero in style.css) sit right
+   below the fixed topbar+nav, so they need that header's real height —
+   it varies by breakpoint (topbar hidden + nav flush to top on mobile).
+   Measured at rest (pre-scroll nav padding) since the hero itself scrolls
+   away with the page well before the nav's scrolled-state padding kicks in. */
+const topbar = document.getElementById('topbar');
+function setTeamHeaderHeight() {
+  const h = (topbar ? topbar.offsetHeight : 0) + nav.offsetHeight;
+  document.documentElement.style.setProperty('--team-header-h', h + 'px');
+}
+setTeamHeaderHeight();
+window.addEventListener('resize', setTeamHeaderHeight);
+window.addEventListener('load', setTeamHeaderHeight);
 
 
 /* ── TOP BAR: current month (auto-updating) ── */
@@ -35,6 +48,27 @@ function toggleMenu() {
   const isOpen  = menu.classList.toggle('open');
   document.body.style.overflow = isOpen ? 'hidden' : '';
   if (burger) burger.setAttribute('aria-expanded', String(isOpen));
+  if (!isOpen) {
+    menu.querySelectorAll('.mob-dropdown.open').forEach(d => {
+      d.classList.remove('open');
+      d.querySelector('.mob-dropdown-trigger').setAttribute('aria-expanded', 'false');
+    });
+  }
+}
+
+/* "Investment" / "Über uns" inside the mobile menu — same exclusive
+   open-one-at-a-time behaviour as the FAQ accordion. */
+function toggleMobDropdown(btn) {
+  const dropdown = btn.closest('.mob-dropdown');
+  const isOpen = dropdown.classList.contains('open');
+  document.querySelectorAll('.mob-dropdown.open').forEach(d => {
+    d.classList.remove('open');
+    d.querySelector('.mob-dropdown-trigger').setAttribute('aria-expanded', 'false');
+  });
+  if (!isOpen) {
+    dropdown.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
 }
 
 
@@ -90,121 +124,6 @@ const counterObserver = new IntersectionObserver(
   { threshold: 0.5 }
 );
 document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
-
-
-/* ── 5. HEDGING CHART (CANVAS) ── */
-
-function drawHedgingChart() {
-  const canvas = document.getElementById('hedgingChart');
-  if (!canvas) return;
-
-  const ctx = canvas.getContext('2d');
-  canvas.width  = canvas.offsetWidth  * devicePixelRatio;
-  canvas.height = canvas.offsetHeight * devicePixelRatio;
-  ctx.scale(devicePixelRatio, devicePixelRatio);
-
-  const W   = canvas.offsetWidth;
-  const H   = canvas.offsetHeight;
-  const pad = { t: 20, r: 20, b: 40, l: 50 };
-  const iW  = W - pad.l - pad.r;
-  const iH  = H - pad.t - pad.b;
-  // Seeded PRNG (mulberry32) — deterministic but looks like real markets
-  let seed = 1337;
-  function rand() {
-    seed |= 0; seed = seed + 0x6D2B79F5 | 0;
-    let t = Math.imul(seed ^ seed >>> 15, 1 | seed);
-    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
-    return ((t ^ t >>> 14) >>> 0) / 4294967296;
-  }
-
-  const n = 80;
-  const spData = [], wcData = [];
-  let sv = 100, wv = 100;
-  let wcPeak = 100;
-
-  for (let i = 0; i < n; i++) {
-    // S&P: high volatility, hard crash around i=30-50, slow recovery
-    const spBias = (i < 30) ? 0.06 : (i < 50) ? -0.55 : 0.08;
-    sv += (rand() - 0.5 + spBias) * 6;
-    sv  = Math.max(45, sv);
-    spData.push(sv);
-
-    // Wiesel: low volatility, steady uptrend, max ~6% drawdown
-    const wcBias = (i < 30) ? 0.18 : (i < 50) ? 0.04 : 0.22;
-    wv += (rand() - 0.5 + wcBias) * 2;
-    wcPeak = Math.max(wcPeak, wv);
-    wv  = Math.max(wcPeak * 0.94, wv); // enforce 6% max drawdown
-    wcData.push(wv);
-  }
-
-  const allValues = [...spData, ...wcData];
-  const minVal    = Math.min(...allValues) - 5;
-  const maxVal    = Math.max(...allValues) + 5;
-  const scaleY    = v => pad.t + iH - (v - minVal) / (maxVal - minVal) * iH;
-  const scaleX    = i => pad.l + (i / (n - 1)) * iW;
-
-  // Grid lines
-  ctx.strokeStyle = 'rgba(201,168,76,.18)';
-  ctx.lineWidth   = 1;
-  for (let g = 0; g <= 4; g++) {
-    const y = pad.t + (g / 4) * iH;
-    ctx.beginPath();
-    ctx.moveTo(pad.l, y);
-    ctx.lineTo(W - pad.r, y);
-    ctx.stroke();
-  }
-
-  // S&P 500 line (red)
-  ctx.beginPath();
-  spData.forEach((v, i) =>
-    i === 0 ? ctx.moveTo(scaleX(i), scaleY(v)) : ctx.lineTo(scaleX(i), scaleY(v))
-  );
-  ctx.strokeStyle = 'rgba(248,113,113,.95)';
-  ctx.lineWidth   = 2;
-  ctx.stroke();
-
-  // Wiesel Capital line (gold)
-  ctx.beginPath();
-  wcData.forEach((v, i) =>
-    i === 0 ? ctx.moveTo(scaleX(i), scaleY(v)) : ctx.lineTo(scaleX(i), scaleY(v))
-  );
-  ctx.strokeStyle = '#e2c97e';
-  ctx.lineWidth   = 2.5;
-  ctx.stroke();
-
-  // Legend
-  ctx.font      = '11px Jost, sans-serif';
-  ctx.fillStyle = '#e2c97e';
-  ctx.fillRect(pad.l, H - 26, 22, 3);
-  ctx.fillStyle = 'rgba(220,210,190,.9)';
-  ctx.fillText('Wiesel System', pad.l + 28, H - 20);
-
-  ctx.fillStyle = 'rgba(248,113,113,.95)';
-  ctx.fillRect(pad.l + 148, H - 26, 22, 3);
-  ctx.fillStyle = 'rgba(220,210,190,.9)';
-  ctx.fillText('S&P 500 ungesichert', pad.l + 176, H - 20);
-
-  // Axis labels
-  ctx.fillStyle = 'rgba(220,210,190,.6)';
-  ctx.font      = '10px Jost, sans-serif';
-  ctx.fillText('Hoch', pad.l - 38, pad.t + 4);
-  ctx.fillText('Tief', pad.l - 32, pad.t + iH);
-}
-
-// Draw chart only when it scrolls into view
-const hedgingChartEl = document.getElementById('hedgingChart');
-if (hedgingChartEl) {
-  const chartObserver = new IntersectionObserver(
-    entries => entries.forEach(e => {
-      if (e.isIntersecting) {
-        drawHedgingChart();
-        chartObserver.disconnect();
-      }
-    }),
-    { threshold: 0.3 }
-  );
-  chartObserver.observe(hedgingChartEl);
-}
 
 
 /* ── 6. FAQ ACCORDION ── */
@@ -271,7 +190,7 @@ document.addEventListener('keydown', e => {
   const fmt         = n => Math.round(n).toLocaleString('de-DE') + ' €';
 
   const START_VAL  = 100000;
-  const WIESEL_VAL = 2745000;
+  const WIESEL_VAL = 3783000;
   const ETF_VAL    = 753000;
   const PLOT_WIDTH = 640;
   const DURATION   = 1900;
@@ -627,3 +546,85 @@ document.addEventListener('keydown', e => {
   slider.addEventListener('input', update);
   update();
 })();
+
+
+/* ── 19. AUTO-SCROLL CAROUSELS ──
+   Shared driver behind two independent tracks:
+   - #trust .trust-grid — below the 860px breakpoint this becomes a
+     horizontally scrollable track (see CSS) holding the 3 badge cards
+     twice in a row; above that breakpoint it's a static grid, so the
+     scrollWidth===clientWidth check below naturally no-ops it.
+   - #reviews .review-track — the Trustpilot review carousel, which
+     scrolls at every viewport width since it's the page's primary
+     content there, not a mobile-only fallback.
+   Each drives a slow, continuous right-to-left auto-scroll on top of
+   native overflow-x, so touch/trackpad scrolling and tapping a card both
+   keep working untouched. Auto-scroll pauses whenever the visitor is
+   actively touching/dragging and resumes shortly after they let go, and
+   wraps scrollLeft by exactly one card-set width (measured, not
+   hardcoded) once it — or the visitor — scrolls past the first set, so
+   the loop back to the start is invisible. No-ops on any page/track
+   that isn't present. */
+function initAutoCarousel(track, SPEED) {
+  if (!track) return;
+
+  let setWidth = 0;
+  let paused = false;
+  let resumeTimer = null;
+  let last = null;
+  // Tracked separately from track.scrollLeft (which the browser rounds to
+  // an integer on every read) so a sub-1px-per-frame speed can still
+  // accumulate smoothly instead of rounding away to nothing each frame.
+  let pos = track.scrollLeft;
+
+  function measure() {
+    setWidth = track.scrollWidth / 2;
+  }
+
+  function pause() {
+    paused = true;
+    clearTimeout(resumeTimer);
+  }
+  function scheduleResume() {
+    clearTimeout(resumeTimer);
+    resumeTimer = setTimeout(() => {
+      paused = false;
+      last = null;
+      pos = track.scrollLeft; // continue from wherever the visitor left it
+    }, 2200);
+  }
+
+  track.addEventListener('pointerdown', pause, { passive: true });
+  track.addEventListener('pointerup', scheduleResume, { passive: true });
+  track.addEventListener('pointercancel', scheduleResume, { passive: true });
+  track.addEventListener('touchstart', pause, { passive: true });
+  track.addEventListener('touchend', scheduleResume, { passive: true });
+  track.addEventListener('wheel', () => { pause(); scheduleResume(); }, { passive: true });
+
+  track.addEventListener('scroll', () => {
+    if (setWidth && track.scrollLeft >= setWidth) {
+      track.scrollLeft -= setWidth;
+      pos = track.scrollLeft;
+    }
+  }, { passive: true });
+
+  function tick(now) {
+    if (last === null) last = now;
+    const dt = Math.min((now - last) / 1000, 0.1);
+    last = now;
+    if (!paused && !reducedMotion && setWidth && track.clientWidth < track.scrollWidth - 1) {
+      pos += SPEED * dt;
+      track.scrollLeft = pos;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  window.addEventListener('resize', measure);
+  window.addEventListener('load', measure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  measure();
+  requestAnimationFrame(tick);
+}
+
+initAutoCarousel(document.querySelector('#trust .trust-grid'), 28);
+initAutoCarousel(document.querySelector('#reviews .review-track'), 24);

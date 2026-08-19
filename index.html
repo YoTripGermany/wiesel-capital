@@ -73,12 +73,15 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preconnect" href="https://randomuser.me"/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Jost:wght@200;300;400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet"/>
 
   <!-- Preload hero image for faster LCP -->
   <link rel="preload" as="image" href="Fotos Webseite/ML_0225_V1--65.png"/>
 
-  <link rel="stylesheet" href="css/style.css?v=52"/>
+  <link rel="stylesheet" href="css/style.css?v=100"/>
+
+  <script src="https://t.contentsquare.net/uxa/4f8378cae3f2b.js" defer></script>
 </head>
 <body class="page-home">
 
@@ -149,17 +152,43 @@
 <!-- ── MOBILE MENU ── -->
 <div class="mob-menu" id="mobMenu" role="dialog" aria-modal="true" aria-label="Navigation">
   <button class="mob-close" onclick="toggleMenu()" aria-label="Menü schließen">✕</button>
-  <a href="index.html"          onclick="toggleMenu()">Startseite</a>
-  <a href="mentoring.html"      onclick="toggleMenu()">Mentoring</a>
-  <a href="strategie.html"      onclick="toggleMenu()">Meine Strategie</a>
-  <a href="zusammenarbeit.html" onclick="toggleMenu()">Zusammenarbeit</a>
-  <a href="faq.html"            onclick="toggleMenu()">FAQ</a>
+  <a href="index.html" onclick="toggleMenu()">Startseite</a>
+  <div class="mob-dropdown">
+    <button class="mob-dropdown-trigger" onclick="toggleMobDropdown(this)" aria-expanded="false">
+      Investment
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="mob-dropdown-menu">
+      <div class="mob-dropdown-menu-inner">
+        <a href="mentoring.html" onclick="toggleMenu()">Mentoring</a>
+        <a href="strategie.html" onclick="toggleMenu()">Meine Strategie</a>
+        <a href="zusammenarbeit.html" onclick="toggleMenu()">Zusammenarbeit</a>
+        <a href="faq.html" onclick="toggleMenu()">FAQ</a>
+      </div>
+    </div>
+  </div>
   <a href="erfolgsgeschichten.html" onclick="toggleMenu()">Erfolgsgeschichten</a>
-  <a href="finn-wiesel.html"    onclick="toggleMenu()">Das ist Finn Wiesel</a>
-  <a href="team.html"           onclick="toggleMenu()">Unser Team</a>
-  <a href="karriere.html"       onclick="toggleMenu()">Karriere</a>
-  <a href="https://calendly.com/wiesel-capital-info/30min" target="_blank" rel="noopener" onclick="toggleMenu()">Jetzt kostenlos beraten lassen</a>
+  <div class="mob-dropdown">
+    <button class="mob-dropdown-trigger" onclick="toggleMobDropdown(this)" aria-expanded="false">
+      Über uns
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="mob-dropdown-menu">
+      <div class="mob-dropdown-menu-inner">
+        <a href="finn-wiesel.html" onclick="toggleMenu()">Das ist Finn Wiesel</a>
+        <a href="team.html" onclick="toggleMenu()">Unser Team</a>
+        <a href="karriere.html" onclick="toggleMenu()">Karriere</a>
+      </div>
+    </div>
+  </div>
+  <a href="https://calendly.com/wiesel-capital-info/30min" target="_blank" rel="noopener" class="btn-p mob-menu-cta" aria-label="Jetzt kostenlos beraten lassen" onclick="toggleMenu()">
+    <span class="btn-text-wrap">
+      <span class="btn-text btn-text-a">Jetzt kostenlos beraten lassen</span>
+      <span class="btn-text btn-text-b">Jetzt kostenlos beraten lassen</span>
+    </span>
+  </a>
 </div>
+
 
 <main>
 
@@ -186,9 +215,9 @@
 
             <div class="hero-social-proof">
               <div class="avatar-stack" aria-hidden="true">
-                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""/>
-                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt=""/>
-                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt=""/>
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" width="30" height="30"/>
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" width="30" height="30"/>
+                <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="" width="30" height="30"/>
               </div>
               <div class="hero-social-text"><strong class="counter" data-target="1000" data-suffix="+">0</strong> Teilnehmer</div>
             </div>
@@ -225,6 +254,29 @@
           <span class="trust-link">Bewertungen ansehen →</span>
         </a>
         <a href="https://www.linkedin.com/in/finn-alexander-wiesel-4826942a6/" target="_blank" rel="noopener" class="trust-item trust-item--action fade d2">
+          <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <h3 class="trust-h">Über 12 Jahre Börsenerfahrung</h3>
+          <p class="trust-p">Head Coach &amp; Teamleiter bei Deutschlands größtem Investment Coach Anbieter.</p>
+          <span class="trust-link">Werdegang ansehen →</span>
+        </a>
+
+        <!-- Duplicate set, mobile-only carousel: lets the auto-scroll loop
+             seamlessly from the 3rd card back to the 1st. Hidden from
+             assistive tech / keyboard tabbing since it repeats the cards
+             above; desktop never shows these (see .trust-item--dup CSS). -->
+        <button type="button" class="trust-item trust-item--action trust-item--dup" tabindex="-1" aria-hidden="true" onclick="document.getElementById('certLightbox').classList.add('open')">
+          <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div>
+          <h3 class="trust-h">Wertpapieranalyst der Frankfurt School of Finance</h3>
+          <p class="trust-p">Offizielles Zertifikat von Finn Wiesel.</p>
+          <span class="trust-link">Zertifikat ansehen →</span>
+        </button>
+        <a href="https://de.trustpilot.com/review/wiesel-capital.com" target="_blank" rel="noopener" class="trust-item trust-item--action trust-item--dup" tabindex="-1" aria-hidden="true">
+          <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+          <h3 class="trust-h">Hervorragend auf Trustpilot bewertet</h3>
+          <div class="trust-stars" aria-hidden="true">★★★★★</div>
+          <span class="trust-link">Bewertungen ansehen →</span>
+        </a>
+        <a href="https://www.linkedin.com/in/finn-alexander-wiesel-4826942a6/" target="_blank" rel="noopener" class="trust-item trust-item--action trust-item--dup" tabindex="-1" aria-hidden="true">
           <div class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
           <h3 class="trust-h">Über 12 Jahre Börsenerfahrung</h3>
           <p class="trust-p">Head Coach &amp; Teamleiter bei Deutschlands größtem Investment Coach Anbieter.</p>
@@ -304,7 +356,7 @@
             </svg>
             <div class="chart-endlabel chart-endlabel--wiesel" style="top:9.5%">
               <span class="chart-endlabel-name">Wiesel-System</span>
-              <span class="chart-endlabel-value" id="wealthWiesel">2.745.000&nbsp;€</span>
+              <span class="chart-endlabel-value" id="wealthWiesel">3.783.000&nbsp;€</span>
             </div>
             <div class="chart-endlabel chart-endlabel--sp500" style="top:76%">
               <span class="chart-endlabel-name">S&amp;P 500</span>
@@ -320,15 +372,15 @@
         </div>
         <div class="perf-kpi-col">
           <div class="perf-kpi-card">
-            <div class="perf-kpi-num">17,85%</div>
+            <div class="perf-kpi-num">19,31%</div>
             <div class="perf-kpi-lbl">p.a. Ø Rendite</div>
           </div>
           <div class="perf-kpi-card">
-            <div class="perf-kpi-num">+2.645%</div>
+            <div class="perf-kpi-num">+3.683%</div>
             <div class="perf-kpi-lbl">Wertentwicklung</div>
           </div>
           <div class="perf-kpi-card">
-            <div class="perf-kpi-num">–6%</div>
+            <div class="perf-kpi-num">–12%</div>
             <div class="perf-kpi-lbl">größter historischer Rückgang</div>
           </div>
         </div>
@@ -361,11 +413,11 @@
             <div class="drawdown-start">100.000&nbsp;€</div>
             <div class="drawdown-label">Mit Wiesel Capital System</div>
             <div class="drawdown-bar-track">
-              <div class="drawdown-bar" data-pct="6">
-                <span class="drawdown-pct">−6&nbsp;%</span>
+              <div class="drawdown-bar" data-pct="12">
+                <span class="drawdown-pct">−12&nbsp;%</span>
               </div>
             </div>
-            <div class="drawdown-end">~&nbsp;94.000&nbsp;€</div>
+            <div class="drawdown-end">~&nbsp;88.000&nbsp;€</div>
           </div>
         </div>
       </div>
@@ -386,73 +438,64 @@
           <div class="testimonial-cards-viewport">
 
             <div class="testimonial-card is-active">
-              <div class="testimonial-card-photo">
-                <img src="Fotos Webseite/michael-bergmann.png" alt="Michael Bergmann" loading="lazy"/>
-              </div>
               <div class="testimonial-card-content">
                 <div class="testimonial-head">
-                  <span class="testimonial-name">Michael Bergmann</span>
-                  <span class="testimonial-role">Unternehmer, 54 Jahre</span>
+                  <span class="testimonial-name">Sandra H.</span>
+                  <span class="testimonial-role">Investorin &amp; Traderin</span>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Problem</div>
-                  <p class="testimonial-block-text">Michaels Depot bestand aus Einzelaktien und Fondsempfehlungen seiner Hausbank — gewachsen über Jahre, aber ohne erkennbare Strategie dahinter. Bei jedem Kurseinbruch stellte sich ihm dieselbe Frage: verkaufen oder halten?</p>
+                  <p class="testimonial-block-text">Sandra hatte bereits eine Börsenausbildung absolviert und dabei viel gelernt. Trotzdem fehlte ihr ein klarer, verlässlicher Gesamtprozess: Der entscheidende Knoten war noch nicht geplatzt und trotz ihres großen Engagements gelang ihr der Schritt in die konstante Profitabilität nicht.</p>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Ziel</div>
-                  <p class="testimonial-block-text">Mehr Struktur und Ruhe im Depot, ohne selbst zum Vollzeit-Börsianer zu werden. Das Vermögen sollte systematisch wachsen und in Krisenzeiten geschützt sein.</p>
+                  <p class="testimonial-block-text">Ihr großer Traum war es, von der Börse leben und mit ihrem Van frei durch Europa reisen zu können. Dafür wollte sie ihr Vermögen strukturiert investieren und gleichzeitig als Vollzeit-Traderin ein stabiles Einkommen aufbauen – für maximale zeitliche und örtliche Freiheit.</p>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Lösung</div>
-                  <p class="testimonial-block-text">Im Wiesel Capital Mentoring entwickelte Michael einen klaren, regelbasierten Investment-Plan. Sein Depot folgt seither festen Regeln für Ein- und Ausstieg — mit einer Rendite von rund 19&nbsp;% pro Jahr seit Beginn der Zusammenarbeit.</p>
+                  <p class="testimonial-block-text">Bei Wiesel Capital etablierte Sandra zunächst ein regelbasiertes Investmentsystem, das Struktur und Ruhe in ihre langfristige Geldanlage brachte. Im persönlichen 1:1-Trading-Coaching gelang es ihr anschließend, ihr vorhandenes Wissen konsequent in die Praxis umzusetzen. So handelte sie erstmals über mehrere Monate hinweg profitabel und erzielte nach eigener Aussage Erträge auf einem Niveau, von dem sie ihren Lebensunterhalt bestreiten kann.</p>
                 </div>
               </div>
             </div>
 
             <div class="testimonial-card">
-              <div class="testimonial-card-photo">
-                <img src="Fotos Webseite/sabine-hartmann.png" alt="Sabine Hartmann" loading="lazy"/>
-              </div>
               <div class="testimonial-card-content">
                 <div class="testimonial-head">
-                  <span class="testimonial-name">Sabine Hartmann</span>
-                  <span class="testimonial-role">Selbstständige Ärztin, 48 Jahre</span>
+                  <span class="testimonial-name">Sebastian S.</span>
+                  <span class="testimonial-role">Selbstständiger Augenoptiker &amp; Unternehmer</span>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Problem</div>
-                  <p class="testimonial-block-text">Sabine hatte neben ihrer Praxis kaum Zeit, sich um ihre Geldanlage zu kümmern — aus Unsicherheit blieb ein Großteil ihres Ersparten einfach auf dem Tagesgeldkonto liegen.</p>
+                  <p class="testimonial-block-text">Sebastian investierte bereits, doch ihm fehlte ein klarer und verlässlicher Prozess. Besonders in unruhigen Marktphasen beeinflussten Emotionen seine Entscheidungen – dadurch fiel es ihm schwer, eine Strategie konsequent durchzuziehen.</p>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Ziel</div>
-                  <p class="testimonial-block-text">Ihr Vermögen sollte für sie arbeiten, ohne dass sie täglich Börsennachrichten verfolgen musste. Wichtig war ihr vor allem, in Krisenzeiten nicht in Panik verkaufen zu müssen.</p>
+                  <p class="testimonial-block-text">Er wollte ein strukturiertes Investmentsystem, das ihm Sicherheit und Ruhe gibt. Sein Ziel: attraktive Renditechancen bei kontrolliertem Risiko und ein klarer Plan, den er unabhängig von kurzfristigen Marktschwankungen konsequent umsetzen kann.</p>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Lösung</div>
-                  <p class="testimonial-block-text">Mit dem Wiesel Capital System investiert Sabine heute nach einem klaren, regelbasierten Plan. Seit Beginn der Zusammenarbeit erzielt sie rund 18&nbsp;% Rendite pro Jahr — bei deutlich geringeren Rückgängen als am breiten Aktienmarkt.</p>
+                  <p class="testimonial-block-text">Im persönlichen 1:1-Coaching wurde das Wiesel Capital System individuell für Sebastian aufgesetzt – mit breiter Diversifikation, klaren Regeln und einem Hedging-Ansatz für turbulente Marktphasen. Bereits nach knapp einem Monat lag seine erste eingebuchte Strategie 10&nbsp;% im Plus. Gleichzeitig fällt es ihm heute deutlich leichter, Schwankungen gelassen einzuordnen und lösungsorientiert zu handeln.</p>
                 </div>
               </div>
             </div>
 
             <div class="testimonial-card">
-              <div class="testimonial-card-photo">
-                <img src="Fotos Webseite/thomas-richter.png" alt="Thomas Richter" loading="lazy"/>
-              </div>
               <div class="testimonial-card-content">
                 <div class="testimonial-head">
-                  <span class="testimonial-name">Thomas Richter</span>
-                  <span class="testimonial-role">IT-Berater, 59 Jahre</span>
+                  <span class="testimonial-name">Michael S.</span>
+                  <span class="testimonial-role">Zahnarzt &amp; Praxisinhaber</span>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Problem</div>
-                  <p class="testimonial-block-text">Thomas plante, in wenigen Jahren in den Ruhestand zu gehen. Ein Großteil seines Vermögens steckte in einem breit gestreuten Aktien-ETF — ein Crash kurz vor dem Ruhestand hätte seine Pläne um Jahre zurückwerfen können.</p>
+                  <p class="testimonial-block-text">Michael verfügte bereits über ein eigenes Depot und war mit einigen Ergebnissen zufrieden. Gleichzeitig hatte er das Gefühl, dass an der Börse noch mehr möglich ist und seinem Vermögen eine übergeordnete Struktur fehlt. Vor allem für zukünftige Einzahlungen gab es noch keinen klaren, langfristigen Plan.</p>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Ziel</div>
-                  <p class="testimonial-block-text">Kapitalerhalt hatte für ihn Vorrang vor maximaler Rendite. Sein Vermögen sollte weiter wachsen, ohne bei einem Crash kurz vor der Rente einen Großteil davon zu verlieren.</p>
+                  <p class="testimonial-block-text">Er wollte ein verlässliches Investmentsystem etablieren, in das er neues Kapital konsequent nach festen Regeln investieren kann. Eine Strategie, die ihm Ruhe gibt, attraktive Ergebnisse ermöglicht und ihn auch bei Marktschwankungen ruhig schlafen lässt.</p>
                 </div>
                 <div class="testimonial-block">
                   <div class="testimonial-block-label">Lösung</div>
-                  <p class="testimonial-block-text">Mit dem Wiesel Capital System sichert Thomas sein Depot systematisch gegen große Verluste ab. Sein Vermögen wächst seither mit rund 17&nbsp;% pro Jahr — bei einem maximalen historischen Rückgang von nur 6&nbsp;%.</p>
+                  <p class="testimonial-block-text">Im persönlichen Mentoring wurde Michaels finanzielle Situation gemeinsam strukturiert und das Wiesel Capital System individuell auf seine Ziele und Möglichkeiten ausgerichtet. Bereits nach wenigen Wochen hatte er deutlich mehr Klarheit, Struktur und einen konkreten Plan für seine nächsten Schritte. Damit kann er sein Vermögen langfristig und systematisch weiterentwickeln.</p>
                 </div>
               </div>
             </div>
@@ -581,14 +624,14 @@
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <img src="logo-wiesel-capital-white.png" alt="Wiesel Capital" class="footer-logo-img"/>
+        <img src="logo-wiesel-capital-white.png" alt="Wiesel Capital" class="footer-logo-img" loading="lazy"/>
         <p class="footer-tagline">Langfristig. Erfolgreich. Investieren.</p>
         <div class="footer-social">
-          <a href="#" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.06 1.1.05 1.8.2 2.4.45.7.27 1.2.62 1.7 1.13.5.5.86 1 1.13 1.7.24.6.4 1.3.45 2.4.05 1 .06 1.4.06 4.1s0 3.1-.06 4.1c-.05 1.1-.2 1.8-.45 2.4a4.6 4.6 0 01-1.13 1.7 4.6 4.6 0 01-1.7 1.13c-.6.24-1.3.4-2.4.45-1 .05-1.4.06-4.1.06s-3.1 0-4.1-.06c-1.1-.05-1.8-.2-2.4-.45a4.6 4.6 0 01-1.7-1.13 4.6 4.6 0 01-1.13-1.7c-.24-.6-.4-1.3-.45-2.4C2 15.1 2 14.7 2 12s0-3.1.06-4.1c.05-1.1.2-1.8.45-2.4.27-.7.62-1.2 1.13-1.7A4.6 4.6 0 015.34 2.5c.6-.24 1.3-.4 2.4-.45C8.74 2 9.14 2 12 2zm0 1.8c-2.65 0-2.97 0-4 .06-.97.04-1.5.2-1.85.33-.46.18-.8.4-1.15.75-.35.35-.57.69-.75 1.15-.13.36-.29.88-.33 1.85-.05 1.03-.06 1.35-.06 4s0 2.97.06 4c.04.97.2 1.5.33 1.85.18.46.4.8.75 1.15.35.35.69.57 1.15.75.36.13.88.29 1.85.33 1.03.05 1.35.06 4 .06s2.97 0 4-.06c.97-.04 1.5-.2 1.85-.33.46-.18.8-.4 1.15-.75.35-.35.57-.69.75-1.15.13-.36.29-.88.33-1.85.05-1.03.06-1.35.06-4s0-2.97-.06-4c-.04-.97-.2-1.5-.33-1.85a3 3 0 00-.75-1.15 3 3 0 00-1.15-.75c-.36-.13-.88-.29-1.85-.33-1.03-.05-1.35-.06-4-.06zm0 3.5a4.7 4.7 0 110 9.4 4.7 4.7 0 010-9.4zm0 1.8a2.9 2.9 0 100 5.8 2.9 2.9 0 000-5.8zm5.9-2a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2z"/></svg></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8.1h2.7l.4-3.2h-3.1V7.7c0-.9.25-1.5 1.6-1.5h1.6V3.3c-.3-.04-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2H10V21h3.5z"/></svg></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-7.2L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.6L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20z"/></svg></a>
-          <a href="#" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.7 3.6 3.7 3.9v2.9c-1.3 0-2.6-.4-3.7-1.1v6.6a5.6 5.6 0 11-4.8-5.5v3a2.6 2.6 0 102.1 2.6V3h2.7z"/></svg></a>
+          <a href="https://www.instagram.com/finn_wiesel/" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.06 1.1.05 1.8.2 2.4.45.7.27 1.2.62 1.7 1.13.5.5.86 1 1.13 1.7.24.6.4 1.3.45 2.4.05 1 .06 1.4.06 4.1s0 3.1-.06 4.1c-.05 1.1-.2 1.8-.45 2.4a4.6 4.6 0 01-1.13 1.7 4.6 4.6 0 01-1.7 1.13c-.6.24-1.3.4-2.4.45-1 .05-1.4.06-4.1.06s-3.1 0-4.1-.06c-1.1-.05-1.8-.2-2.4-.45a4.6 4.6 0 01-1.7-1.13 4.6 4.6 0 01-1.13-1.7c-.24-.6-.4-1.3-.45-2.4C2 15.1 2 14.7 2 12s0-3.1.06-4.1c.05-1.1.2-1.8.45-2.4.27-.7.62-1.2 1.13-1.7A4.6 4.6 0 015.34 2.5c.6-.24 1.3-.4 2.4-.45C8.74 2 9.14 2 12 2zm0 1.8c-2.65 0-2.97 0-4 .06-.97.04-1.5.2-1.85.33-.46.18-.8.4-1.15.75-.35.35-.57.69-.75 1.15-.13.36-.29.88-.33 1.85-.05 1.03-.06 1.35-.06 4s0 2.97.06 4c.04.97.2 1.5.33 1.85.18.46.4.8.75 1.15.35.35.69.57 1.15.75.36.13.88.29 1.85.33 1.03.05 1.35.06 4 .06s2.97 0 4-.06c.97-.04 1.5-.2 1.85-.33.46-.18.8-.4 1.15-.75.35-.35.57-.69.75-1.15.13-.36.29-.88.33-1.85.05-1.03.06-1.35.06-4s0-2.97-.06-4c-.04-.97-.2-1.5-.33-1.85a3 3 0 00-.75-1.15 3 3 0 00-1.15-.75c-.36-.13-.88-.29-1.85-.33-1.03-.05-1.35-.06-4-.06zm0 3.5a4.7 4.7 0 110 9.4 4.7 4.7 0 010-9.4zm0 1.8a2.9 2.9 0 100 5.8 2.9 2.9 0 000-5.8zm5.9-2a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2z"/></svg></a>
+          <a href="https://www.facebook.com/finn.wiesel.1/" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8.1h2.7l.4-3.2h-3.1V7.7c0-.9.25-1.5 1.6-1.5h1.6V3.3c-.3-.04-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.4H7.3v3.2H10V21h3.5z"/></svg></a>
+          <a href="https://www.linkedin.com/in/finn-alexander-wiesel-4826942a6/?skipRedirect=true" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></a>
+          <a href="https://x.com/WieselCapital" target="_blank" rel="noopener" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-7.2L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.6L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20z"/></svg></a>
+          <a href="https://www.tiktok.com/@wieselcapital?lang=de-DE" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.3 2 1.7 3.6 3.7 3.9v2.9c-1.3 0-2.6-.4-3.7-1.1v6.6a5.6 5.6 0 11-4.8-5.5v3a2.6 2.6 0 102.1 2.6V3h2.7z"/></svg></a>
         </div>
       </div>
       <div class="footer-nav">
@@ -636,9 +679,9 @@
 <!-- ── CERT LIGHTBOX ── -->
 <div id="certLightbox" class="cert-lightbox" role="dialog" aria-modal="true" aria-label="Zertifikat" onclick="if(event.target===this)this.classList.remove('open')">
   <button class="cert-lightbox-close" onclick="document.getElementById('certLightbox').classList.remove('open')" aria-label="Schließen">✕</button>
-  <img src="Fotos Webseite/20260321_162559.jpg" alt="Wertpapieranalyst Zertifikat – Frankfurt School of Finance & Management"/>
+  <img src="Fotos Webseite/20260321_162559.jpg" alt="Wertpapieranalyst Zertifikat – Frankfurt School of Finance & Management" loading="lazy"/>
 </div>
 
-<script src="js/script.js?v=27"></script>
+<script src="js/script.js?v=100" defer></script>
 </body>
 </html>

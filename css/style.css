@@ -45,13 +45,20 @@
 
 html {
   scroll-behavior: smooth;
+  overscroll-behavior-y: none;
 }
 
+/* Stops Safari's elastic bounce past the top edge — without it, the
+   rubber-band motion drags the fixed topbar/nav down with the page and
+   uncovers a strip of whatever sits behind them (on team-hero pages,
+   a sliver of the hero photo that's meant to stay hidden under the
+   header at all times). */
 body {
   font-family: var(--fb);
   background: var(--dg);
   color: var(--text-h);
   overflow-x: hidden;
+  overscroll-behavior-y: none;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
@@ -72,13 +79,10 @@ img {
   /* Backgrounds */
   --dark:   #0a1209;
   --dg:     #ffffff;
-  --mg:     #f0ebe1;
-  --lg:     #ffffff;
 
   /* Gold palette */
   --gold:   #b8902a;
   --gl:     #c9a84c;
-  --gp:     #f0e3ba;
   --gold-text-gradient: linear-gradient(135deg, #f3e6bd 0%, #d9b768 45%, #b8902a 100%);
   /* Darker-starting variant for cream panels — the pale end of the default
      gradient sits too close in lightness to the cream background to read. */
@@ -106,11 +110,9 @@ img {
   --ease: cubic-bezier(.25, .46, .45, .94);
 
   /* Radius tokens */
-  --radius-sm: 12px;
   --radius-md: 18px;
   --radius-lg: 24px;
   --radius-xl: 32px;
-  --radius-2xl: 40px;
   --radius-pill: 999px;
 
   /* Canvas (homepage panel background) */
@@ -131,13 +133,6 @@ img {
   padding: 0 32px;
 }
 
-.gold {
-  background: linear-gradient(135deg, #c9a84c, #e2c97e 40%, #c9a84c);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 .fade {
   opacity: 0;
   transform: translateY(32px);
@@ -153,9 +148,6 @@ img {
 .d3 { transition-delay: .3s; }
 .d4 { transition-delay: .4s; }
 .d5 { transition-delay: .5s; }
-
-.mt-8  { margin-top: 8px; }
-.mt-20 { margin-top: 20px; }
 
 
 /* Offset for fixed nav when jumping to anchor links */
@@ -232,16 +224,17 @@ nav {
   z-index: 1000;
 }
 
+/* Solid (not translucent) so the nav always reads as a clean white bar,
+   never letting a hero photo or dark section show through/behind it on
+   pages where content starts right at the very top of the page. */
 .nav-bg {
-  background: rgba(255,255,255,.92);
-  backdrop-filter: blur(12px);
+  background: #ffffff;
   border-bottom: 1px solid rgba(184,144,42,.15);
   transition: all .4s var(--ease);
   padding: 20px 0;
 }
 nav.scrolled .nav-bg {
-  background: rgba(255,255,255,.98);
-  backdrop-filter: blur(20px);
+  background: #ffffff;
   border-bottom-color: rgba(184,144,42,.25);
   box-shadow: 0 2px 20px rgba(24,39,27,.05);
   padding: 14px 0;
@@ -422,7 +415,7 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
+  gap: 64px;
   font-family: var(--fh);
   max-width: 100%;
 }
@@ -431,13 +424,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   flex: 0 1 580px;
   max-width: 580px;
   min-width: 0;
-}
-
-.hero-eyebrow {
-  font-family: var(--fh);
-  margin-bottom: 16px;
-  opacity: 0;
-  animation: heroFadeUp .8s var(--ease) 1.05s forwards;
 }
 
 .hero-h1-new {
@@ -486,27 +472,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   color: #ffffff;
   overflow: hidden;
 }
-
-/* Text/icon roll-up swap on hover (à la mariolueddemann.com) */
-.btn-icon-wrap {
-  position: relative;
-  width: 15px;
-  height: 15px;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-.btn-icon {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 15px;
-  height: 15px;
-  transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .4s cubic-bezier(.4,0,.2,1);
-}
-.btn-icon-a { transform: translate(0,0); opacity: 1; }
-.btn-icon-b { transform: translate(-14px, 14px); opacity: 0; }
-.btn-p:hover .btn-icon-a { transform: translate(14px, -14px); opacity: 0; }
-.btn-p:hover .btn-icon-b { transform: translate(0,0); opacity: 1; }
 
 .btn-text-wrap {
   position: relative;
@@ -557,7 +522,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   color: var(--gold);
 }
 
-/* Image collage — asymmetric, layered arrangement (not a uniform grid). */
 .hero-right {
   flex: 0 0 500px;
   width: 500px;
@@ -627,7 +591,7 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   to   { opacity: 1; transform: translateX(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-eyebrow, .hero-h1-new, .hero-desc, .hero-cta-row, .hg-img {
+  .hero-h1-new, .hero-desc, .hero-cta-row {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -662,54 +626,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   box-shadow: 0 10px 30px rgba(201,168,76,.35);
 }
 
-.btn-g {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 15px 28px;
-  background: transparent;
-  border: 1px solid rgba(201,168,76,.4);
-  border-radius: var(--radius-pill);
-  color: var(--gold);
-  font-family: var(--fh);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all .3s;
-}
-.btn-g:hover {
-  border-color: var(--gold);
-  background: rgba(201,168,76,.08);
-}
-
-.btn-dark {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 15px 28px;
-  background: var(--dark);
-  border: 1px solid rgba(201,168,76,.4);
-  border-radius: var(--radius-pill);
-  color: var(--gl);
-  font-family: var(--fh);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0;
-  text-transform: none;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all .3s;
-}
-.btn-dark:hover {
-  background: var(--gold);
-  color: var(--dark);
-  border-color: var(--gold);
-}
-
-
 /* ── 9. TRUST SECTION ── */
 
 #trust {
@@ -723,6 +639,9 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
+/* Duplicate set for the mobile auto-scroll loop (see markup comment) —
+   only ever shown inside the mobile carousel layout below. */
+.trust-item.trust-item--dup { display: none; }
 .trust-item {
   position: relative;
   appearance: none;
@@ -800,19 +719,139 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   color: var(--gold);
 }
 
+/* ── TRUSTPILOT REVIEW CAROUSEL (Erfolgsgeschichten) ──
+   Same continuous auto-scroll technique as the homepage mobile trust
+   carousel (see js/script.js): native overflow-x with a JS-driven
+   scrollLeft ticker on top, so touch/trackpad scrolling and pausing on
+   interaction both keep working untouched. Unlike the trust carousel,
+   this one scrolls at every viewport width — it's the page's primary
+   content here, not a mobile-only fallback. The card set is duplicated
+   in the markup so the loop wraps seamlessly; duplicates are
+   aria-hidden/untabbable. */
+.review-track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 4px 4px 12px;
+  margin-top: 8px;
+}
+.review-track::-webkit-scrollbar { display: none; }
+.review-card {
+  flex: 0 0 340px;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 26px;
+  background: #ffffff;
+  border: 1px solid rgba(184,144,42,.14);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 22px rgba(24,39,27,.04);
+}
+.review-stars {
+  color: var(--gold);
+  font-size: 15px;
+  letter-spacing: .1em;
+  margin-bottom: 12px;
+}
+.review-title {
+  font-family: var(--fh);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-h);
+  margin-bottom: 8px;
+}
+.review-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--text-p);
+  line-height: 1.65;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.review-foot {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(184,144,42,.12);
+}
+.review-name {
+  font-family: var(--fh);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-h);
+}
+.review-date {
+  font-size: 12px;
+  color: var(--text-m);
+}
+.reviews-cta {
+  text-align: center;
+  margin-top: 36px;
+}
+
+/* #reviews carries the same warm/gold treatment as #stories right below
+   it, and settles at the exact cream tone #stories now opens on (see
+   "Erfolgsgeschichten only" note near #stories .panel) — so the two
+   sections hand off without a seam and read as one continuous piece
+   instead of two independent white boxes. #reviews is also reused as-is
+   on danke.html (booking confirmation page), where it simply hands off
+   to the footer instead of #stories — the gradient still completes to
+   its cream end stop either way. It has no JS-driven scroll spacer the
+   way #stories does, so plain px gradient stops behave normally here. */
+#reviews {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffffff 0px, #faf6ec 420px, #f2e8d2 820px);
+}
+#reviews .container,
+#reviews .review-track {
+  position: relative;
+  z-index: 1;
+}
+.reviews-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Gold only, on purpose — no second/dark blob near the bottom edge. One
+   was tried there and, being clipped by this section's own overflow:
+   hidden right at the #reviews/#stories boundary, it left a faint seam
+   instead of the intended seamless hand-off. A single top blob avoids
+   that, and rhymes with the one over "Echte, analysierte" below. */
+.reviews-glow::before {
+  content: '';
+  position: absolute;
+  top: -120px;
+  left: -110px;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  filter: blur(100px);
+  background: radial-gradient(circle, rgba(201,168,76,.28) 0%, rgba(201,168,76,0) 70%);
+  animation: storiesGlowDrift 24s var(--ease) infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reviews-glow::before { animation: none; }
+}
+
 
 /* ── 10. SECTION LAYOUT & HEADERS ── */
 
 .sec-dark   { padding: 64px 0; background: var(--dg); }
 .sec-darker { padding: 64px 0; background: #18271b; }
 .sec-light  { padding: 64px 0; background: #ffffff; }
-.sec-mid    { padding: 64px 0; background: var(--cm); }
 
 .sec-head {
   text-align: center;
   margin-bottom: 40px;
 }
-.sec-head--tight { margin-bottom: 22px; }
 .sec-h2 {
   font-family: var(--fd);
   font-size: clamp(34px, 4vw, 58px);
@@ -866,15 +905,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   border-color: rgba(184,144,42,.4);
 }
 
-.pillar-num {
-  font-family: var(--fh);
-  font-size: 64px;
-  font-weight: 800;
-  color: rgba(184,144,42,.08);
-  position: absolute;
-  top: 16px; right: 24px;
-  line-height: 1;
-}
 .pillar-icon {
   width: 52px;
   height: 52px;
@@ -904,273 +934,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
 }
 
 
-/* ── 12. QUOTE SECTION ── */
-
-#quote {
-  position: relative;
-  padding: 80px 0;
-  overflow: hidden;
-}
-.quote-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
-}
-.quote-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg,
-    rgba(8,15,10,.95) 0%,
-    rgba(8,15,10,.85) 50%,
-    rgba(8,15,10,.75) 100%
-  );
-}
-.quote-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-}
-.quote-mark {
-  font-family: var(--fd);
-  font-size: 120px;
-  font-weight: 700;
-  color: var(--gold);
-  opacity: .3;
-  line-height: .6;
-  margin-bottom: 20px;
-}
-.quote-text {
-  font-family: var(--fd);
-  font-size: clamp(24px, 3vw, 40px);
-  font-weight: 300;
-  font-style: italic;
-  line-height: 1.35;
-  color: var(--cream);
-  margin-bottom: 32px;
-}
-.quote-attr {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-
-
-/* ── 13. MENTORING ── */
-
-.mentoring-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-.mentoring-img-wrap { position: relative; }
-.mentoring-img {
-  width: 100%;
-  aspect-ratio: 2/3;
-  object-fit: cover;
-  object-position: center 20%;
-}
-.mentoring-img-accent {
-  position: absolute;
-  bottom: -24px;
-  right: -24px;
-  background: var(--gold);
-  padding: 20px 28px;
-  color: var(--dark);
-}
-.mentoring-img-accent strong {
-  display: block;
-  font-family: var(--fd);
-  font-size: 36px;
-  font-weight: 600;
-  line-height: 1;
-}
-.mentoring-img-accent span {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  opacity: .8;
-}
-.mentoring-h2 {
-  font-family: var(--fd);
-  font-size: clamp(40px, 5vw, 72px);
-  font-weight: 300;
-  color: var(--text-h);
-  line-height: 1.05;
-  margin-bottom: 24px;
-}
-.mentoring-h2 em { font-style: italic; color: #2a5a33; }
-.mentoring-p {
-  font-size: 16px;
-  font-weight: 300;
-  color: #3a4a3c;
-  line-height: 1.9;
-  margin-bottom: 18px;
-}
-.mentoring-p--quote {
-  font-style: italic;
-  color: var(--tm);
-}
-
-
-/* ── 14. PROCESS STEPS ── */
-
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-}
-.step {
-  padding: 48px 36px;
-  border-right: 1px solid rgba(201,168,76,.12);
-}
-.step:last-child { border-right: none; }
-.step-num {
-  font-family: var(--fd);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .2em;
-  color: var(--gold);
-  margin-bottom: 20px;
-}
-.step-h {
-  font-family: var(--fd);
-  font-size: 28px;
-  font-weight: 500;
-  color: var(--cream);
-  margin-bottom: 16px;
-}
-.step-p {
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--tl);
-  line-height: 1.85;
-}
-
-
-/* ── 15. WHY SYSTEMATIC ── */
-
-.why-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-}
-.why-card {
-  background: var(--cream);
-  padding: 48px 36px;
-  position: relative;
-  overflow: hidden;
-}
-.why-num {
-  font-family: var(--fd);
-  font-size: 72px;
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, #c9a84c, #e2c97e);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.why-h {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--text-h);
-  margin-bottom: 14px;
-}
-.why-p {
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--tm);
-  line-height: 1.85;
-}
-
-
-/* ── 17. MISTAKES ── */
-
-.mistakes {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-}
-.mistake {
-  background: #ffffff;
-  padding: 28px 24px;
-  transition: background .3s, box-shadow .3s;
-  border: 1px solid rgba(0,0,0,.06);
-  box-shadow: 0 2px 12px rgba(0,0,0,.04);
-}
-.mistake:hover {
-  background: #f5f9f6;
-  box-shadow: 0 8px 28px rgba(0,0,0,.08);
-}
-.mistake-icon {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(184,144,42,.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 20px;
-  background: rgba(184,144,42,.05);
-}
-.mistake-icon svg { width: 14px; height: 14px; color: var(--gold); }
-.mistake-h {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--text-h);
-  margin-bottom: 8px;
-}
-.mistake-symptom {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gold);
-  margin-bottom: 6px;
-}
-.mistake-p {
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--text-p);
-  line-height: 1.8;
-}
-
-
-/* ── 18. WHAT CLIENTS WANT ── */
-
-.wants {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
-}
-.want {
-  border-left: 2px solid var(--gold);
-  padding: 0 0 0 24px;
-}
-.want-h {
-  font-family: var(--fd);
-  font-size: 22px;
-  font-weight: 500;
-  color: var(--text-h);
-  margin-bottom: 12px;
-}
-.want-p {
-  font-size: 13px;
-  font-weight: 300;
-  color: var(--tm);
-  line-height: 1.8;
-}
-
-
 /* ── 19. ABOUT FINN ── */
 
 .about-layout {
@@ -1191,53 +954,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   border-radius: var(--radius-lg);
   box-shadow: 0 20px 50px rgba(0,0,0,.35);
 }
-
-.about-h2 {
-  font-family: var(--fd);
-  font-size: clamp(24px, 2.8vw, 38px);
-  font-weight: 300;
-  color: var(--cream);
-  margin-bottom: 14px;
-  line-height: 1.15;
-}
-.about-h2 em { font-style: italic; color: var(--gl); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-.about-p {
-  font-size: 15px;
-  font-weight: 300;
-  line-height: 1.8;
-  color: var(--tl);
-  margin-bottom: 12px;
-}
-
-.about-cred-list {
-  margin: 20px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.about-cred-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 12px 14px;
-  background: rgba(201,168,76,.05);
-  border-left: 2px solid var(--gold);
-}
-.about-cred-item svg {
-  width: 16px;
-  height: 16px;
-  color: var(--gold);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.about-cred-text {
-  font-size: 13px;
-  font-weight: 300;
-  color: var(--tl);
-  line-height: 1.5;
-}
-.about-cred-text strong { color: var(--cream); font-weight: 500; }
 
 /* ── CERT LIGHTBOX ── */
 .cert-lightbox {
@@ -1274,189 +990,8 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
 .cert-lightbox-close:hover { opacity: 1; }
 
 
-/* ── 20. VALUES ── */
-
-.values {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-}
-.value {
-  padding: 40px 32px;
-  border-right: 1px solid rgba(184,144,42,.15);
-}
-.value:last-child { border-right: none; }
-.values--stack {
-  grid-template-columns: 1fr;
-}
-.values--stack .value { border-right: none; padding: 28px 0; }
-.value-num {
-  font-family: var(--fd);
-  font-size: 72px;
-  font-weight: 300;
-  color: rgba(184,144,42,.1);
-  line-height: 1;
-  margin-bottom: 0;
-}
-.value-h {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-  margin-top: -16px;
-}
-.value-p {
-  font-size: 15px;
-  font-weight: 300;
-  color: var(--text-p);
-  line-height: 1.85;
-}
-
-
-/* ── 21. PROGRAM ── */
-
-.program {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-.prog-item {
-  position: relative;
-  background: #ffffff;
-  border: 1px solid rgba(184,144,42,.2);
-  border-radius: var(--radius-lg);
-  padding: 32px 30px;
-  display: flex;
-  gap: 22px;
-  overflow: hidden;
-  box-shadow: 0 14px 34px rgba(0,0,0,.22);
-  transition: transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s;
-}
-.prog-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--gold-text-gradient-cream);
-}
-.prog-item:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 22px 48px rgba(0,0,0,.28);
-  border-color: rgba(184,144,42,.4);
-}
-.prog-item--overflow { overflow: hidden; }
-
-.prog-num {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--gold);
-  color: var(--dark);
-  font-family: var(--fh);
-  font-size: 15px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.prog-content { flex: 1; }
-.prog-header {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 12px;
-}
-.prog-header .prog-h { margin-bottom: 0; }
-
-.prog-h {
-  font-family: var(--fh);
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--text-h);
-  margin-bottom: 10px;
-}
-.prog-p {
-  font-family: var(--fh);
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--text-p);
-  line-height: 1.75;
-}
-
-.prog-wa-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: #25D366;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.prog-wa-watermark {
-  position: absolute;
-  bottom: -10px;
-  right: -10px;
-  opacity: .04;
-  pointer-events: none;
-}
-
-
 /* ── 22. PERFORMANCE ── */
 
-.perf-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
-.perf-chart {
-  width: 100%;
-  border: 1px solid rgba(201,168,76,.15);
-}
-.perf-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 28px;
-}
-.perf-stat {
-  position: relative;
-  background: #ffffff;
-  padding: 22px 24px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid rgba(184,144,42,.2);
-  box-shadow: 0 10px 26px rgba(0,0,0,.1);
-}
-.perf-stat::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--gold-text-gradient-cream);
-}
-.perf-stat-num {
-  font-family: var(--fh);
-  font-size: 30px;
-  font-weight: 800;
-  color: var(--gold);
-  line-height: 1;
-}
-.perf-stat-lbl {
-  font-family: var(--fh);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--text-m);
-  margin-top: 6px;
-}
 .perf-h2 {
   font-family: var(--fh);
   font-size: clamp(24px, 2.6vw, 34px);
@@ -1496,10 +1031,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   transform: translateX(-50%);
   background: linear-gradient(to bottom, transparent, var(--gold) 10%, var(--gold) 90%, transparent);
 }
-.blueprint-img {
-  width: 100%;
-  border: 1px solid rgba(201,168,76,.15);
-}
 .blueprint-h2 {
   font-family: var(--fh);
   font-size: clamp(26px, 2.8vw, 38px);
@@ -1523,76 +1054,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
 
 /* ── 24. HEDGING ── */
 
-.hedging-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
-}
-.hedging-h2 {
-  font-family: var(--fh);
-  font-weight: 700;
-  font-size: clamp(26px, 2.8vw, 38px);
-  text-align: left;
-  margin-bottom: 20px;
-}
-.hedging-p {
-  font-family: var(--fh);
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--tl);
-  line-height: 1.85;
-  margin-bottom: 24px;
-}
-.hedging-p--last { margin-bottom: 32px; }
-
-.hedging-numbers {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 32px;
-}
-.hedging-num {
-  position: relative;
-  background: #ffffff;
-  padding: 26px 24px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: 1px solid rgba(184,144,42,.2);
-  box-shadow: 0 10px 26px rgba(0,0,0,.1);
-}
-.hedging-num::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--gold-text-gradient-cream);
-}
-.hedging-num-val {
-  font-family: var(--fh);
-  font-size: 32px;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 6px;
-}
-.hedging-num-val--neutral { color: var(--tl); }
-.hedging-num-lbl {
-  font-family: var(--fh);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--text-m);
-}
-.hedging-num.bad  .hedging-num-val { color: #f87171; }
-.hedging-num.good .hedging-num-val { color: var(--gold); }
-
-.canvas-chart {
-  width: 100%;
-  height: 280px;
-  border: 1px solid rgba(201,168,76,.3);
-  background: #0d1c10;
-}
 .chart-caption {
   font-family: var(--fh);
   font-size: 10px;
@@ -1696,20 +1157,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   object-fit: cover;
   object-position: center 10%;
 }
-.team-photo-placeholder {
-  width: 100%;
-  aspect-ratio: 3/4;
-  background: linear-gradient(145deg, #eaf2ec, #d8eadb);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.team-initials {
-  font-family: var(--fh);
-  font-size: 72px;
-  font-weight: 300;
-  color: rgba(184,144,42,.25);
-}
 .team-info { padding: 28px 24px; }
 .team-name {
   font-family: var(--fh);
@@ -1732,144 +1179,6 @@ nav.scrolled .logo-img { height: 27px; top: 2px; }
   font-size: 12.5px;
   font-weight: 400;
   color: var(--text-p);
-  line-height: 1.8;
-}
-
-
-/* ── 27. CONTACT & CALENDLY ── */
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: start;
-}
-.contact-h2 {
-  font-family: var(--fd);
-  font-size: clamp(30px, 3.5vw, 50px);
-  font-weight: 300;
-  color: var(--cream);
-  margin-bottom: 16px;
-  line-height: 1.15;
-}
-.contact-h2 em { font-style: italic; color: var(--gl); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.contact-sub {
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--tl);
-  line-height: 1.8;
-  margin-bottom: 40px;
-}
-.contact-detail {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-.c-icon {
-  width: 38px;
-  height: 38px;
-  border: 1px solid rgba(201,168,76,.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.c-icon svg { width: 14px; height: 14px; color: var(--gold); }
-.c-lbl {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 3px;
-}
-.c-val {
-  font-size: 13px;
-  font-weight: 300;
-  color: var(--tl);
-}
-
-.form-box {
-  background: #ffffff;
-  padding: 44px;
-  border: 1px solid rgba(0,0,0,.07);
-  box-shadow: 0 8px 40px rgba(0,0,0,.08);
-}
-.calendly-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 28px;
-  padding: 52px 40px;
-}
-.calendly-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 14px;
-}
-.calendly-h3 {
-  font-family: var(--fd);
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 300;
-  color: var(--text-h);
-  line-height: 1.2;
-  margin-bottom: 16px;
-}
-.calendly-h3 em { font-style: italic; color: var(--gold); background: var(--gold-text-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.calendly-p {
-  font-size: 14px;
-  color: var(--text-p);
-  line-height: 1.7;
-  max-width: 340px;
-  margin: 0 auto;
-}
-.calendly-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  max-width: 340px;
-}
-.calendly-actions .btn-p {
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-.calendly-note {
-  font-size: 11px;
-  color: var(--text-m);
-  opacity: .8;
-  margin: 0;
-}
-
-
-/* ── 28. FINAL CTA ── */
-
-.sec-final-cta {
-  padding: 64px 0;
-  background: #f0ebe1;
-  text-align: center;
-  border-top: 1px solid rgba(184,144,42,.2);
-}
-.final-cta-h2 {
-  font-family: var(--fd);
-  font-size: clamp(28px, 3.5vw, 52px);
-  font-weight: 300;
-  color: var(--text-h);
-  margin-bottom: 16px;
-  line-height: 1.15;
-}
-.final-cta-p {
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--text-p);
-  max-width: 600px;
-  margin: 0 auto 40px;
   line-height: 1.8;
 }
 
@@ -2065,11 +1374,7 @@ footer {
 
 @media (max-width: 1024px) {
   .about-layout,
-  .mentoring-grid,
-  .perf-layout,
-  .blueprint-grid,
-  .hedging-grid,
-  .contact-grid {
+  .blueprint-grid {
     grid-template-columns: 1fr;
     gap: 48px;
   }
@@ -2080,9 +1385,15 @@ footer {
 
 @media (max-width: 860px) {
   #hero { padding: 96px 0 40px; }
+  /* The hero is the one deliberate exception to the "everything centered
+     on mobile" rule elsewhere on the homepage — headline, copy and CTA
+     stay left-aligned here. */
   .hero-flex { flex-direction: column; align-items: flex-start; gap: 32px; }
-  .hero-left { flex-basis: auto; max-width: 100%; }
-  .hero-right { flex: 0 0 auto; width: 100%; max-width: 380px; }
+  /* Photos of Finn lead on mobile, headline/copy/CTA follow — flipped via
+     `order` rather than reworking the HTML source order (which still
+     puts hero-left first for desktop's side-by-side layout). */
+  .hero-left { flex-basis: auto; max-width: 100%; order: 2; }
+  .hero-right { flex: 0 0 auto; width: 100%; max-width: 380px; order: 1; }
 }
 
 @media (max-width: 1000px) {
@@ -2091,36 +1402,166 @@ footer {
      hamburger menu earlier than the old breakpoint. */
   .nav-links, .btn-nav { display: none; }
   .hamburger { display: flex; }
+
+  /* Mobile: the contact/status strip above the header is dropped entirely
+     to save vertical space, so the nav moves up to sit flush with the
+     top of the viewport instead of leaving an empty 38px gap. */
+  #topbar { display: none; }
+  nav { top: 0; }
+  section[id], div[id] { scroll-margin-top: 80px; }
+
+  /* Mobile menu: a white panel that slides in from the right edge
+     instead of the old full-screen instant show/hide — display can't be
+     transitioned, so the open/close is driven by transform + visibility. */
+  .mob-menu {
+    display: flex;
+    z-index: 1002;
+    inset: 0 0 0 auto;
+    left: auto;
+    width: min(84vw, 380px);
+    background: #ffffff;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 104px 36px 40px;
+    overflow-y: auto;
+    box-shadow: -30px 0 60px rgba(10,18,9,.18);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform .4s var(--ease), visibility .4s var(--ease);
+  }
+  .mob-menu.open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+  .mob-menu > a:not(.btn-p),
+  .mob-dropdown-trigger {
+    font-family: var(--fh);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    color: var(--text-h);
+    width: 100%;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(184,144,42,.14);
+  }
+  .mob-menu > a:not(.btn-p) { display: block; }
+  .mob-menu > a:not(.btn-p):hover,
+  .mob-menu > a:not(.btn-p):active { color: var(--gold); }
+  .mob-close {
+    color: var(--text-h);
+    top: 28px;
+    right: 28px;
+  }
+
+  /* Mobile nav dropdowns ("Investment" / "Über uns"): mirrors the desktop
+     header's own 4-item structure (Startseite / Investment / Erfolgsgeschichten
+     / Über uns) instead of a flat list of every sub-page — the two groups
+     expand in place, same grid-rows technique as the FAQ accordion.
+     .mob-dropdown itself needs an explicit width: it's a flex item of
+     .mob-menu (align-items: flex-start), so without one it would shrink
+     to fit the button's own text instead of matching the full-width divider
+     line under "Startseite" / "Erfolgsgeschichten". */
+  .mob-dropdown { width: 100%; }
+  .mob-dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-radius: 0;
+    cursor: pointer;
+    text-align: left;
+    padding-right: 6px;
+  }
+  .mob-dropdown-trigger svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    color: var(--gold);
+    transition: transform .3s;
+  }
+  .mob-dropdown.open .mob-dropdown-trigger { color: var(--gold); }
+  .mob-dropdown.open .mob-dropdown-trigger svg { transform: rotate(180deg); }
+
+  .mob-dropdown-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows .35s var(--ease);
+  }
+  .mob-dropdown.open .mob-dropdown-menu { grid-template-rows: 1fr; }
+  .mob-dropdown-menu-inner { overflow: hidden; }
+  .mob-dropdown-menu a {
+    display: block;
+    width: 100%;
+    padding: 12px 0 12px 16px;
+    font-family: var(--fh);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    color: var(--text-h);
+    border-bottom: 1px solid rgba(184,144,42,.1);
+  }
+  .mob-dropdown-menu a:last-child { border-bottom: none; }
+  .mob-dropdown-menu a:hover, .mob-dropdown-menu a:active { color: var(--gold); }
+
+  /* Mobile menu CTA: the same gold pill as everywhere else on the site,
+     not a plain text row. Re-asserts the .btn-p text styling explicitly —
+     the legacy .mob-menu a rule above is a descendant selector (matches
+     this link too) with higher specificity than plain .btn-p, so without
+     this it would win and paste its 34px serif style onto the button. */
+  .mob-menu a.mob-menu-cta.btn-p {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 22px;
+    border-bottom: none;
+    font-family: var(--fh);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: #ffffff;
+    text-decoration: none;
+  }
 }
 
 @media (max-width: 768px) {
   .container { padding: 0 20px; }
   .hero-cta-row { gap: 16px; }
-  .sec-dark, .sec-darker, .sec-light, .sec-mid { padding: 48px 0; }
-  .mentoring-grid { gap: 48px; }
+  .sec-dark, .sec-darker, .sec-light { padding: 48px 0; }
   .about-layout { gap: 36px; }
 
   .pillars,
-  .steps,
-  .mistakes,
-  .wants,
-  .values,
-  .program,
   .team-grid {
     grid-template-columns: 1fr;
   }
 
-  .step { border-right: none; border-bottom: 1px solid rgba(201,168,76,.12); }
-
-  .why-grid,
-  .trust-grid {
-    grid-template-columns: 1fr;
+  /* Homepage trust badges: horizontally-scrolling, auto-moving carousel
+     instead of 3 stacked cards — see script.js for the right-to-left
+     auto-scroll (native overflow-x, so touch/trackpad scrolling and
+     tapping a card both keep working exactly as before). */
+  #trust .trust-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: auto;
+    gap: 16px;
+    padding: 4px 4px 6px;
+    margin: -4px -4px -6px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-
-  .hedging-numbers,
-  .perf-stats {
-    grid-template-columns: 1fr 1fr;
+  #trust .trust-grid::-webkit-scrollbar { display: none; }
+  #trust .trust-item {
+    flex: 0 0 auto;
+    width: min(80vw, 290px);
+    height: auto;
   }
+  #trust .trust-item--dup { display: flex; }
 
   .footer-top { flex-direction: column; gap: 40px; }
   .footer-brand, .footer-newsletter { max-width: none; }
@@ -2128,179 +1569,21 @@ footer {
   .footer-bot { flex-direction: column; align-items: flex-start; }
 }
 
-
-/* ── 31. COLLABORATION PROCESS ── */
-
-.collab-list {
-  position: relative;
-  max-width: 900px;
-  margin: 0 auto;
-}
-.collab-list::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: linear-gradient(180deg, transparent, rgba(201,168,76,.25) 15%, rgba(201,168,76,.25) 85%, transparent);
-  transform: translateX(-50%);
+@media (max-width: 1000px) {
+  /* Safety net: a long, unbreakable German compound word inside a heading
+     or button (e.g. "Investmententscheidungen") can be a few px wider than
+     a narrow phone viewport at the type system's minimum clamp() size.
+     Letting it wrap mid-word beats a page-wide horizontal scrollbar. */
+  html { overflow-x: hidden; }
+  h1, h2, h3, .btn-p, .sec-sub, .sec-h2, p { overflow-wrap: break-word; }
 }
 
-.collab-step {
-  display: grid;
-  grid-template-columns: 1fr 60px 1fr;
-  align-items: center;
-  gap: 0;
-  margin-bottom: 56px;
-}
-.collab-step:last-child { margin-bottom: 0; }
-
-.collab-num {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--gold);
-  color: var(--dark);
-  font-family: var(--fh);
-  font-size: 17px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-}
-
-.collab-content {
-  padding: 28px 36px;
-}
-.collab-content--right { text-align: left; }
-.collab-content--left  { text-align: right; }
-.collab-empty { }
-
-.collab-h {
-  font-family: var(--fh);
-  font-size: 19px;
-  font-weight: 700;
-  color: var(--text-h);
-  margin-bottom: 10px;
-}
-.collab-p {
-  font-family: var(--fh);
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--text-p);
-  line-height: 1.85;
-}
-
-
-/* ── 32. COMPARISON TABLE ── */
-
-.compare-wrap {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-.compare-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 680px;
-}
-
-.compare-table thead th {
-  padding: 20px 24px;
-  text-align: center;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.compare-table thead th:first-child {
-  text-align: left;
-  font-size: 12px;
-  color: var(--text-m);
-  font-weight: 400;
-  letter-spacing: 0;
-  text-transform: none;
-}
-.compare-table thead th.col-featured {
-  background: var(--gold);
-  color: var(--dark);
-  font-weight: 700;
-}
-.compare-table thead th.col-other {
-  color: var(--text-m);
-  background: #ffffff;
-  border-bottom: 1px solid rgba(0,0,0,.07);
-}
-
-.compare-table tbody tr:hover td { background-color: rgba(0,0,0,.015); }
-.compare-table tbody tr:hover td.col-featured { background-color: rgba(201,168,76,.1); }
-
-.compare-table td {
-  padding: 16px 24px;
-  border-bottom: 1px solid rgba(0,0,0,.06);
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--text-p);
-  background: #ffffff;
-}
-.compare-table td:first-child {
-  font-weight: 400;
-  color: var(--text-h);
-}
-.compare-table td.col-featured {
-  background: rgba(201,168,76,.06);
-  border-left: 2px solid var(--gold);
-  border-right: 2px solid var(--gold);
-  text-align: center;
-}
-.compare-table td.col-other {
-  text-align: center;
-}
-.compare-table tbody tr:last-child td.col-featured {
-  border-bottom: 2px solid var(--gold);
-}
-
-.compare-check {
-  color: var(--gold);
-  font-size: 17px;
-  line-height: 1;
-}
-.compare-cross {
-  color: rgba(0,0,0,.18);
-  font-size: 17px;
-  line-height: 1;
-}
-
-.compare-cta-row td {
-  padding-top: 24px;
-  padding-bottom: 24px;
-  border-bottom: none;
-  background: transparent !important;
-}
-.compare-cta-row td.col-featured {
-  border-bottom: none;
-}
-
-@media (max-width: 768px) {
-  .collab-step {
-    grid-template-columns: 1fr;
-    text-align: left !important;
-  }
-  .collab-list::before { display: none; }
-  .collab-step { position: relative; padding-left: 60px; }
-  .collab-num {
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin: 0;
-  }
-  .collab-content--left,
-  .collab-content--right { text-align: left; padding: 0; }
-  .collab-empty { display: none; }
+@media (max-width: 420px) {
+  /* A few CTA buttons carry long copy ("Unsere Investmentstrategie
+     entdecken →") that only just clears its own horizontal padding on the
+     narrowest phones — trim the pill's padding so the text stays clear of
+     the page edge instead of relying on the overflow-x safety net above. */
+  .btn-p { padding: 15px 22px; font-size: 13.5px; }
 }
 
 
@@ -2338,65 +1621,6 @@ button:focus-visible {
 }
 
 
-/* ── 36. PERFORMANCE DISCLAIMER ── */
-
-.perf-disclaimer {
-  font-family: var(--fh);
-  font-size: 10px;
-  font-weight: 400;
-  color: var(--text-m);
-  line-height: 1.6;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(0,0,0,.08);
-  max-width: 520px;
-}
-
-
-/* ── 37. LEGAL DISCLAIMER BAR ── */
-
-.disclaimer-bar {
-  background: #0d1a10;
-  border-top: 1px solid rgba(201,168,76,.1);
-  padding: 18px 0;
-}
-.disclaimer-bar p {
-  font-family: var(--fh);
-  font-size: 11px;
-  font-weight: 400;
-  color: rgba(200,192,170,.55);
-  line-height: 1.7;
-  max-width: 900px;
-}
-.disclaimer-bar strong {
-  color: rgba(200,192,170,.75);
-  font-weight: 500;
-}
-.disclaimer-bar a {
-  color: var(--gl);
-  text-decoration: none;
-  white-space: nowrap;
-}
-.disclaimer-bar a:hover {
-  text-decoration: underline;
-}
-
-
-
-/* ── 39. WANT-P CONTRAST FIX ── */
-
-.want-p {
-  color: var(--text-p);
-}
-
-
-/* ── 40. MENTORING-P CONTRAST FIX ── */
-
-.mentoring-p {
-  color: var(--text-p);
-}
-
-
 /* ── 41. GENERAL SELECTION STYLE ── */
 
 ::selection {
@@ -2423,7 +1647,6 @@ body.page-home { background: var(--canvas); }
   padding: var(--sec-pad-desktop) 0;
   position: relative;
 }
-.panel--tight { padding: 56px 0; }
 .panel--sticky-safe { overflow: visible; }
 .panel--sticky-safe .container { position: relative; }
 .panel--cream { background: var(--cm); }
@@ -2455,13 +1678,6 @@ body.page-home { background: var(--canvas); }
   margin-left: auto;
   margin-right: auto;
 }
-.sec-sub--strong {
-  font-size: 19px;
-  font-weight: 500;
-  max-width: 620px;
-}
-.sec-sub--strong strong { color: var(--gl); font-weight: 700; }
-
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -2476,14 +1692,6 @@ body.page-home { background: var(--canvas); }
 }
 
 /* -- 42.2 OPPORTUNITY -- */
-.opp-intro {
-  font-family: var(--fh);
-  font-size: 15px;
-  font-weight: 400;
-  color: var(--tl);
-  line-height: 1.65;
-}
-.opp-intro strong { color: var(--cream); font-weight: 600; }
 .opp-shell {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
@@ -2556,7 +1764,6 @@ body.page-home { background: var(--canvas); }
   min-width: 0;
   overflow: hidden;
 }
-.chart-panel--dark  { background: #10190f; border: 1px solid rgba(201,168,76,.16); }
 .chart-panel--white { background: #fefcf7; border: 1px solid rgba(184,144,42,.16); box-shadow: 0 14px 34px rgba(0,0,0,.22); }
 .chart-panel--white::before {
   content: '';
@@ -2581,17 +1788,8 @@ body.page-home { background: var(--canvas); }
   color: var(--tl);
   margin-left: 4px;
 }
-.chart-panel--dark .chart-title  { color: var(--cream); }
 .chart-panel--white .chart-title { color: var(--text-h); }
 .chart-panel--white .chart-title span { color: var(--text-m); }
-.chart-sub {
-  font-family: var(--fh);
-  font-size: 13px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-.chart-panel--dark .chart-sub  { color: var(--tl); }
-.chart-panel--white .chart-sub { color: var(--text-m); }
 .chart-svg { width: 100%; height: auto; display: block; overflow: visible; }
 .chart-visual { position: relative; }
 .chart-endlabel {
@@ -2846,20 +2044,10 @@ body.page-home { background: var(--canvas); }
 .testimonial-card.is-active {
   pointer-events: auto;
 }
-.testimonial-card-photo {
-  flex: 0 0 38%;
-  overflow: hidden;
-}
-.testimonial-card-photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
 .testimonial-card-content {
   flex: 1;
   min-width: 0;
-  padding: 40px 48px 40px 36px;
+  padding: 48px 56px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2901,6 +2089,64 @@ body.page-home { background: var(--canvas); }
   line-height: 1.65;
 }
 #stories .panel { padding: 108px 0; }
+/* Erfolgsgeschichten only — #stories is a shared component id (index.html's
+   homepage testimonials reuse the same markup), so this is scoped off the
+   body class rather than #stories alone, or it would leak onto the
+   homepage too. Flat color, not a gradient: #reviews right above already
+   does the white→cream transition and settles at this exact tone, so
+   #stories just continues it — a second gradient here would either
+   restart at white (visible seam) or, since .panel's real height is a
+   JS-computed scroll spacer that can run to several thousand px for a
+   3-card hold (see the "42.7 TESTIMONIALS" note above), all but vanish
+   across that height anyway. Flat has neither problem. */
+body.page-erfolgsgeschichten #stories .panel {
+  background: #f2e8d2;
+}
+/* Ambient glow behind the heading/card — lives inside .testimonial-stage
+   (not .container or .testimonial-track) because the stage is the sticky,
+   viewport-sized box that's actually on screen throughout the hold; the
+   track around it is the same oversized scroll spacer as above, so
+   anchoring there would park the blobs mostly off-screen. .testimonial-
+   stage is position:sticky, which (like relative/absolute) establishes a
+   containing block for this absolutely-positioned child, and as an
+   out-of-flow child it can't perturb the stage's own height — so it's
+   safe alongside the JS scroll/height math. Kept overflow:visible (the
+   default) so the blobs, offset outside this box on purpose, aren't
+   clipped; .panel--sticky-safe already keeps every ancestor up to .panel
+   overflow:visible too, which the sticky stage itself depends on. */
+.stories-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.stories-glow::before,
+.stories-glow::after {
+  content: '';
+  position: absolute;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  filter: blur(100px);
+  animation: storiesGlowDrift 24s var(--ease) infinite alternate;
+}
+.stories-glow::before {
+  top: -80px;
+  left: -140px;
+  background: radial-gradient(circle, rgba(201,168,76,.30) 0%, rgba(201,168,76,0) 70%);
+}
+.stories-glow::after {
+  bottom: -100px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(24,39,27,.18) 0%, rgba(24,39,27,0) 70%);
+  animation-delay: -12s;
+}
+@keyframes storiesGlowDrift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(48px, 34px) scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stories-glow::before, .stories-glow::after { animation: none; }
+}
 .testimonial-cta {
   margin-top: 32px;
   text-align: center;
@@ -3223,31 +2469,6 @@ body.page-home { background: var(--canvas); }
 }
 .drawdown-col--bad .drawdown-end { color: #4a463c; }
 .drawdown-col--good .drawdown-end { color: var(--gold); }
-/* -- 42.15 ERFOLGSGESCHICHTEN (illustrative story fields) -- */
-.story-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  text-align: left;
-  margin-top: 10px;
-}
-.story-field-label {
-  font-family: var(--fh);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 10px;
-}
-.story-field-text {
-  font-family: var(--fh);
-  font-size: 13.5px;
-  font-weight: 400;
-  color: var(--text-p);
-  line-height: 1.65;
-}
-
 /* -- 42.16 FOUNDER CTA -- */
 .founder-cta { margin-top: 4px; }
 
@@ -3283,18 +2504,47 @@ body.page-home { background: var(--canvas); }
     transform: none;
     pointer-events: auto;
   }
-  .testimonial-card-photo { flex-basis: auto; aspect-ratio: 16 / 10; }
   .testimonial-card-content { padding: 26px 24px; }
 }
 
 @media (max-width: 768px) {
   .panel { padding: var(--sec-pad-mobile) 0; }
   .founder-stats { grid-template-columns: 1fr; }
+
+  /* Homepage "Lernen Sie von jemandem..." block: centered like the rest
+     of the mobile homepage instead of left-aligned. Scoped to #about so
+     mentoring.html's reuse of this exact component is untouched. */
+  #about .founder-content { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  #about .founder-p { margin-left: auto; margin-right: auto; }
+  #about .founder-stats { justify-items: center; text-align: center; margin-left: auto; margin-right: auto; }
+  #about .founder-stat { align-items: center; }
+  #about .founder-cta { display: flex; justify-content: center; }
+
   .perf-kpi-col { flex-direction: column; }
   .perf-kpi-card + .perf-kpi-card { border-top: 1px solid rgba(184,144,42,.14); border-left: none; }
-  .chart-endlabel-name { font-size: 9.5px; }
-  .chart-endlabel--wiesel .chart-endlabel-value { font-size: 16px; }
-  .chart-endlabel--sp500 .chart-endlabel-value { font-size: 11px; }
+  /* End-of-line value labels: swap to value-on-top / name-below (reads
+     cleaner stacked over a narrow chart) and nudge them right so the
+     number clears the line instead of sitting on top of it. */
+  .chart-endlabel {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-end;
+    right: 0;
+  }
+  /* Pull the Wiesel-System label (the line's peak, top-right) further up
+     and away from its own end-of-line dot instead of centering on it. */
+  /* Homepage's own chart card reads slightly tighter than "Meine Strategie"'s
+     (different heading above it), so -100% overshot into the title there —
+     scoped to .page-home only, "Meine Strategie" keeps its own -100%. */
+  body.page-home .chart-endlabel--wiesel { transform: translateY(-60%); }
+  body:not(.page-home) .chart-endlabel--wiesel { transform: translateY(-100%); }
+  .chart-endlabel-name { font-size: 8.5px; margin-bottom: 0; margin-top: 2px; }
+  .chart-endlabel--wiesel .chart-endlabel-value { font-size: 14px; }
+  .chart-endlabel--sp500 .chart-endlabel-value { font-size: 10px; }
+
+  /* Homepage's own (non-grid, stacked) KPI cards: centered like the rest
+     of the mobile homepage instead of left-aligned. */
+  body.page-home .perf-kpi-card { align-items: center; text-align: center; }
 }
 
 
@@ -3794,6 +3044,51 @@ body.page-home { background: var(--canvas); }
   margin: 0 auto 32px;
 }
 
+/* Erfolgsgeschichten hero only — #erfolgsgeschichten-hero is a unique id
+   (unlike #stories/#reviews below, .mkt-hero itself is shared by four
+   other pages), so scoping through the id alone keeps this off every
+   other .mkt-hero. Same fading face-photo recipe as .final-cta-face
+   (#contact below): .mkt-hero uses the identical #18271b fill, so the
+   luminosity-blend-into-background trick carries over unchanged. Kept
+   as its own class rather than reusing .final-cta-face so the two
+   components (hero vs. final CTA) stay free to diverge later. */
+#erfolgsgeschichten-hero { position: relative; overflow: hidden; }
+#erfolgsgeschichten-hero .container { position: relative; z-index: 1; }
+.mkt-hero-face {
+  position: absolute;
+  top: 50%;
+  right: -6%;
+  transform: translateY(-32%);
+  width: clamp(480px, 54vw, 880px);
+  aspect-ratio: 1 / 1.1;
+  z-index: 0;
+  pointer-events: none;
+}
+.mkt-hero-face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+  filter: grayscale(1) brightness(.5) contrast(.9);
+  mix-blend-mode: luminosity;
+  opacity: .6;
+  -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 36%, #000 6%, rgba(0,0,0,.55) 38%, transparent 84%);
+          mask-image: radial-gradient(ellipse 72% 70% at 50% 36%, #000 6%, rgba(0,0,0,.55) 38%, transparent 84%);
+}
+.mkt-hero-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #18271b 0%, #18271b 16%, rgba(24,39,27,.7) 32%, transparent 60%);
+}
+@media (max-width: 1180px) {
+  .mkt-hero-face { width: clamp(340px, 44vw, 560px); opacity: .7; }
+}
+@media (max-width: 860px) {
+  .mkt-hero-face { display: none; }
+}
+
 /* -- Problem / recognition list: numbered, staggered fade-in, compact -- */
 .mkt-problem-sec { background: #ffffff; padding: 78px 0; }
 .mkt-problem-sec .sec-head { max-width: 880px; margin-bottom: 34px; }
@@ -4084,12 +3379,6 @@ body.page-home { background: var(--canvas); }
   line-height: 1.6;
 }
 
-/* -- Performance stats: one flat info area, 2x2 grid with hairline dividers -- */
-.perf-kpi-col--grid { display: grid; grid-template-columns: 1fr 1fr; }
-.perf-kpi-col--grid .perf-kpi-card { border-top: none; padding: 26px 24px; }
-.perf-kpi-col--grid .perf-kpi-card:nth-child(-n+2) { border-bottom: 1px solid rgba(184,144,42,.14); }
-.perf-kpi-col--grid .perf-kpi-card:nth-child(odd)  { border-right: 1px solid rgba(184,144,42,.14); }
-
 .strat-perf-close { max-width: 640px; margin: 44px auto 0; text-align: center; }
 .strat-perf-close .perf-h2 { margin-bottom: 14px; }
 .strat-perf-close .perf-p  { margin: 0 auto 24px; max-width: 560px; }
@@ -4227,6 +3516,150 @@ input#riskSlider::-moz-range-thumb {
 @media (max-width: 768px) {
   #zsm-timeline .sec-head { margin-bottom: 64px; }
   .zsm-benefits-sec, .zsm-need-sec { padding: 56px 0; }
+}
+
+
+/* ============================================================
+   51. DANKE PAGE (Calendly booking confirmation)
+   ============================================================ */
+
+/* -- Hero: plain .mkt-hero (no face photo) plus a checkmark badge above
+   the headline to signal "booking confirmed" at a glance. The ring and
+   checkmark are drawn via stroke-dashoffset once .mkt-hero-badge's own
+   .fade reveal fires (see script.js §3) — ring closes first, checkmark
+   follows, so it reads as one continuous confirmation gesture rather
+   than a static icon. -- */
+.mkt-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  height: 92px;
+  margin-bottom: 26px;
+}
+.mkt-hero-badge-svg { width: 100%; height: 100%; }
+/* Dasharray is deliberately well above the measured path length (circle
+   circumference ≈270.2, checkmark polyline ≈58.0) — a value too close to
+   the true length leaves a fractional sliver exposed at dashoffset:X,
+   which the round linecap blows up into a visible dot sitting mid-ring
+   before the draw even starts. Padding the dasharray guarantees the
+   "off" phase fully covers the path at rest, no matter the rounding. */
+.mkt-hero-badge-ring {
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  transform-origin: 50% 50%;
+  transform: rotate(-90deg); /* start the draw at 12 o'clock, not 3 o'clock */
+}
+.mkt-hero-badge-check {
+  stroke-dasharray: 90;
+  stroke-dashoffset: 90;
+}
+.fade.on .mkt-hero-badge-ring  { animation: badgeRingDraw .8s var(--ease) .1s forwards; }
+.fade.on .mkt-hero-badge-check { animation: badgeCheckDraw .5s var(--ease) .8s forwards; }
+@keyframes badgeRingDraw  { to { stroke-dashoffset: 0; } }
+@keyframes badgeCheckDraw { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .mkt-hero-badge-ring, .mkt-hero-badge-check { animation: none; stroke-dashoffset: 0; }
+}
+
+/* -- Confirmation panel: hero copy + "So geht es jetzt weiter" as ONE
+   section (see the HTML comment above #danke-confirm for why — two
+   adjacent sections each clipping their own glow layer left a faint
+   seam at the join even at matching background colors). One background,
+   one overflow:hidden, one glow spanning both content blocks.
+   Padding is intentionally tight so steps 01/02 are readable on load
+   without scrolling, but a bit more air is kept above the badge itself
+   than around it, so the checkmark doesn't sit flush under the nav. -- */
+.danke-confirm-sec { position: relative; overflow: hidden; background: #18271b; text-align: center; }
+.danke-confirm-sec .container { position: relative; z-index: 1; }
+.danke-confirm-top { padding: 168px 0 20px; }
+.danke-confirm-top .mkt-hero-h { margin-bottom: 10px; }
+.danke-confirm-top .mkt-hero-sub { margin-bottom: 0; }
+.danke-confirm-next { padding: 28px 0 56px; }
+.danke-confirm-next .sec-head { margin-bottom: 20px; }
+@media (max-width: 768px) {
+  .danke-confirm-top { padding: 128px 0 20px; }
+  .danke-confirm-next { padding: 24px 0 48px; }
+}
+
+/* -- Motion graphic: same drifting gold glow used as .stories-glow /
+   .reviews-glow elsewhere on the site, spread across the full merged
+   section (not just its lower half) via %-anchors so it scales with
+   content height instead of chasing fixed pixel offsets. Runs faster
+   here (15s vs. the usual 26s) for a livelier, more premium feel. -- */
+.danke-confirm-glow-a, .danke-confirm-glow-b {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.danke-confirm-glow-a::before, .danke-confirm-glow-a::after,
+.danke-confirm-glow-b::before, .danke-confirm-glow-b::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  animation: storiesGlowDrift 15s var(--ease) infinite alternate;
+}
+.danke-confirm-glow-a::before {
+  top: 2%;
+  left: 4%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(201,168,76,.36) 0%, rgba(201,168,76,0) 70%);
+}
+.danke-confirm-glow-a::after {
+  top: 34%;
+  right: 2%;
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, rgba(201,168,76,.22) 0%, rgba(201,168,76,0) 70%);
+  animation-delay: -4s;
+}
+.danke-confirm-glow-b::before {
+  top: 58%;
+  left: 2%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(201,168,76,.28) 0%, rgba(201,168,76,0) 70%);
+  animation-delay: -8s;
+}
+.danke-confirm-glow-b::after {
+  bottom: 0%;
+  right: 4%;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(201,168,76,.20) 0%, rgba(201,168,76,0) 70%);
+  animation-delay: -11s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .danke-confirm-glow-a::before, .danke-confirm-glow-a::after,
+  .danke-confirm-glow-b::before, .danke-confirm-glow-b::after { animation: none; }
+}
+
+/* -- Erfolgsgeschichten section reuses #reviews / .review-track / .reviews-glow
+   verbatim (see TRUSTPILOT REVIEW CAROUSEL, section 9) — same auto-scroll
+   carousel as erfolgsgeschichten.html, no page-specific CSS needed. -- */
+
+
+/* ── 49. LEGAL PAGES (Impressum / Datenschutz / Risikohinweis) ──
+   Plain white reading page under the normal fixed topbar+nav: no hero,
+   no panel background, just the header's clearance padding followed by
+   the site's usual Cormorant Garamond / Jost pairing. Shared by all
+   three legal-text pages so the styling lives in one place instead of
+   being duplicated per file. */
+.legal-page { min-height: 100vh; padding: 168px 24px 80px; max-width: 780px; margin: 0 auto; }
+.legal-page h1 { font-family: var(--fd); font-size: clamp(2rem, 5vw, 3rem); color: var(--text-h); margin-bottom: 2rem; }
+.legal-page h2 { font-family: var(--fd); font-size: 1.4rem; color: var(--gold); margin: 2rem 0 0.5rem; }
+.legal-page h3 { font-family: var(--fd); font-size: 1.15rem; color: var(--text-h); margin: 1.5rem 0 0.4rem; font-weight: 600; }
+.legal-page p, .legal-page address, .legal-page li { color: var(--text-p); line-height: 1.8; font-style: normal; margin-bottom: 0.75rem; }
+.legal-page ul { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+.legal-page a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+.legal-page hr { border: none; border-top: 1px solid rgba(201,168,76,.2); margin: 1.5rem 0; }
+.risk-box { border: 1px solid rgba(201,168,76,.4); border-radius: 8px; padding: 24px; margin: 2rem 0; background: rgba(201,168,76,.05); }
+.risk-box p { margin-bottom: 0; }
+@media (max-width: 768px) {
+  .legal-page { padding-top: 128px; }
 }
 
 
