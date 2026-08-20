@@ -627,4 +627,70 @@ function initAutoCarousel(track, SPEED) {
 }
 
 initAutoCarousel(document.querySelector('#trust .trust-grid'), 28);
+
+/* ── Newsletter → Klaviyo ── */
+(function () {
+  const KLAVIYO_PUBLIC_KEY = 'XAdS8M';
+  const KLAVIYO_LIST_ID = 'X4eeE2';
+
+  const form = document.getElementById('newsletterForm');
+  if (!form) return;
+  const emailInput = form.querySelector('input[type="email"]');
+  const button = form.querySelector('button[type="submit"]');
+  const msg = document.getElementById('newsletterMsg');
+
+  function showMsg(text, isError) {
+    if (!msg) return;
+    msg.textContent = text;
+    msg.classList.toggle('is-error', !!isError);
+    msg.classList.add('is-visible');
+  }
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    if (!email) return;
+
+    button.disabled = true;
+
+    try {
+      const res = await fetch(`https://a.klaviyo.com/client/subscriptions?company_id=${KLAVIYO_PUBLIC_KEY}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          revision: '2024-10-15'
+        },
+        body: JSON.stringify({
+          data: {
+            type: 'subscription',
+            attributes: {
+              profile: {
+                data: {
+                  type: 'profile',
+                  attributes: { email }
+                }
+              }
+            },
+            relationships: {
+              list: {
+                data: { type: 'list', id: KLAVIYO_LIST_ID }
+              }
+            }
+          }
+        })
+      });
+
+      if (res.ok) {
+        showMsg('Danke! Bitte bestätigen Sie Ihre E-Mail-Adresse in Ihrem Postfach.', false);
+        form.reset();
+      } else {
+        showMsg('Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.', true);
+      }
+    } catch (err) {
+      showMsg('Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.', true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
 initAutoCarousel(document.querySelector('#reviews .review-track'), 24);

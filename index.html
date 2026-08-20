@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1385885573635656');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1385885573635656&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
@@ -659,10 +677,11 @@
       <div class="footer-newsletter">
         <h4>Newsletter</h4>
         <p class="footer-newsletter-p">Verpassen Sie keine wichtigen Markt-Insights und Updates von Wiesel Capital mehr.</p>
-        <form class="footer-newsletter-form" onsubmit="return false;">
+        <form class="footer-newsletter-form" id="newsletterForm">
           <input type="email" placeholder="Ihre E-Mail-Adresse" aria-label="E-Mail-Adresse" required/>
           <button type="submit" aria-label="Anmelden"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </form>
+        <p class="footer-newsletter-msg" id="newsletterMsg" role="status" aria-live="polite"></p>
       </div>
     </div>
     <div class="footer-bot">
@@ -682,6 +701,6 @@
   <img src="Fotos Webseite/20260321_162559.jpg" alt="Wertpapieranalyst Zertifikat – Frankfurt School of Finance & Management" loading="lazy"/>
 </div>
 
-<script src="js/script.js?v=100" defer></script>
+<script src="js/script.js?v=101" defer></script>
 </body>
 </html>

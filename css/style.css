@@ -1338,6 +1338,21 @@ footer {
 }
 .footer-newsletter-form button svg { width: 14px; height: 14px; }
 .footer-newsletter-form button:hover { transform: translateX(2px); }
+.footer-newsletter-form button:disabled { opacity: .6; cursor: default; transform: none; }
+.footer-newsletter-msg {
+  font-family: var(--fh);
+  font-size: 12.5px;
+  line-height: 1.5;
+  margin-top: 10px;
+  min-height: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  color: var(--gold);
+  transition: opacity .3s, max-height .3s;
+}
+.footer-newsletter-msg.is-visible { opacity: 1; max-height: 60px; }
+.footer-newsletter-msg.is-error { color: #c0483a; }
 .footer-bot {
   display: flex;
   justify-content: space-between;
