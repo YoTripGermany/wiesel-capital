@@ -694,3 +694,93 @@ initAutoCarousel(document.querySelector('#trust .trust-grid'), 28);
   });
 })();
 initAutoCarousel(document.querySelector('#reviews .review-track'), 24);
+
+/* ── 24. STORY-VIDEO LIGHTBOX ──
+   Chapter posters are plain <button>s carrying data-video / data-video-caption.
+   The <video> in the lightbox ships with no src at all, so a page visit
+   downloads three ~60 KB posters and nothing else — the clip is only
+   attached on click, and detached again on close so a half-watched video
+   stops pulling bytes in the background. */
+(function () {
+  const lb = document.getElementById('videoLightbox');
+  const triggers = document.querySelectorAll('.storyvideo-media[data-video]');
+  if (!lb || !triggers.length) return;
+
+  const video   = lb.querySelector('#vlbVideo');
+  const caption = lb.querySelector('#vlbCaption');
+  const dialog  = lb.querySelector('.vlb-dialog');
+  const closeBtn = lb.querySelector('.vlb-close');
+  let lastFocused = null;
+
+  function isOpen() {
+    return !lb.hasAttribute('hidden');
+  }
+
+  function open(trigger) {
+    lastFocused = trigger;
+    caption.textContent = trigger.dataset.videoCaption || '';
+    video.setAttribute('src', trigger.dataset.video);
+    video.setAttribute('poster', trigger.querySelector('img').getAttribute('src'));
+
+    // Compensate for the scrollbar the lock removes, so the page behind
+    // the backdrop doesn't jump sideways.
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    if (gap > 0) document.body.style.paddingRight = gap + 'px';
+    document.body.classList.add('vlb-open');
+
+    lb.removeAttribute('hidden');
+    // preventScroll: focus() otherwise scrolls its target into view, which
+    // nudges the page behind the backdrop and lands the visitor somewhere
+    // else than where they clicked once the lightbox closes.
+    closeBtn.focus({ preventScroll: true });
+    // Click on the poster is the user gesture, so sound is expected here.
+    const p = video.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  }
+
+  function close() {
+    if (!isOpen()) return;
+    video.pause();
+    video.removeAttribute('src');
+    video.removeAttribute('poster');
+    video.load();                 // aborts any in-flight range request
+    caption.textContent = '';
+
+    lb.setAttribute('hidden', '');
+    document.body.classList.remove('vlb-open');
+    document.body.style.paddingRight = '';
+
+    if (lastFocused) {
+      lastFocused.focus({ preventScroll: true });
+      lastFocused = null;
+    }
+  }
+
+  triggers.forEach(btn => btn.addEventListener('click', () => open(btn)));
+
+  lb.querySelectorAll('[data-vlb-close]').forEach(el => {
+    el.addEventListener('click', close);
+  });
+
+  document.addEventListener('keydown', e => {
+    if (!isOpen()) return;
+    if (e.key === 'Escape') {
+      e.stopPropagation();       // keeps the shared Esc handler out of it
+      close();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+
+    // Keep focus inside the dialog. The <video>'s own controls live in
+    // shadow DOM and are reachable once the element itself has focus.
+    const stops = [closeBtn, video];
+    const i = stops.indexOf(document.activeElement);
+    if (e.shiftKey && i <= 0) {
+      e.preventDefault();
+      stops[stops.length - 1].focus({ preventScroll: true });
+    } else if (!e.shiftKey && i === stops.length - 1) {
+      e.preventDefault();
+      stops[0].focus({ preventScroll: true });
+    }
+  }, true);
+})();

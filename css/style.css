@@ -3678,3 +3678,511 @@ input#riskSlider::-moz-range-thumb {
 }
 
 
+
+
+/* ============================================================
+   43. KUNDENERFAHRUNGEN — CASE STUDY, STORY-VIDEOS, LIGHTBOX
+   ============================================================
+   Scoped to the Erfolgsgeschichten page. Three reusable blocks
+   so further customer stories can be added by markup alone:
+
+     .cstory-*      — case-study frame (eyebrow, name, headline, note)
+     .storyvideo-*  — one video chapter card (poster + play + copy)
+     .outcome-*     — the "what changed" grid
+     .cstory-compact-* — short story card for secondary customers
+     .vlb-*         — the shared video lightbox
+
+   Nothing here restyles a global component: the page keeps the
+   site's nav, footer, .btn-p, .panel rhythm and .fade animation.
+   ============================================================ */
+
+/* -- 43.1 Hero supporting line (Erfolgsgeschichten only) -- */
+#erfolgsgeschichten-hero .mkt-hero-sub { margin-bottom: 12px; }
+.mkt-hero-note {
+  font-family: var(--fh);
+  font-size: 13.5px;
+  font-weight: 400;
+  /* --tm would only reach 3.15:1 on the hero's #18271b — under AA for text
+     this size. --tl at 72% reads just as quiet and clears 5:1. */
+  color: var(--tl);
+  opacity: .72;
+  line-height: 1.6;
+  max-width: 540px;
+  margin: 0 auto 34px;
+}
+
+/* -- 43.2 Case-study head -- */
+.cstory-head {
+  max-width: 740px;
+  margin: 0 auto 54px;
+  text-align: center;
+}
+.cstory-ident {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.cstory-name {
+  font-family: var(--fh);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  color: var(--text-h);
+}
+.cstory-role {
+  font-family: var(--fh);
+  font-size: 13.5px;
+  font-weight: 400;
+  color: var(--text-m);
+  padding-left: 10px;
+  border-left: 1px solid rgba(24, 39, 27, .18);
+}
+.cstory-h2 {
+  font-family: var(--fh);
+  font-size: clamp(28px, 3.4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -.015em;
+  line-height: 1.18;
+  color: var(--text-h);
+  margin: 0 0 18px;
+}
+/* Cream-side gradient: the default --gold-text-gradient opens on #f3e6bd,
+   which is too close to this panel's white to read as gold. */
+.cstory-h2 em {
+  font-style: normal;
+  color: var(--gold);
+  background: var(--gold-text-gradient-cream);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cstory-intro {
+  font-family: var(--fh);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-p);
+  line-height: 1.7;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+/* -- 43.3 Story-video chapter cards -- */
+.storyvideo-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin: 0 0 62px;
+  padding: 0;
+}
+.storyvideo { display: flex; flex-direction: column; }
+
+/* The poster is the button: one focusable control per chapter, so the
+   card needs no nested interactive elements. */
+.storyvideo-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--cm);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: box-shadow .5s var(--ease), transform .5s var(--ease);
+}
+.storyvideo-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .8s var(--ease);
+}
+.storyvideo-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 18, 9, .20) 0%, rgba(10, 18, 9, .02) 44%, rgba(10, 18, 9, .44) 100%);
+  transition: opacity .5s var(--ease);
+}
+.storyvideo-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #c9a84c, #a8832a);
+  color: #ffffff;
+  box-shadow: 0 6px 22px rgba(10, 18, 9, .28);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.storyvideo-play svg {
+  width: 24px;
+  height: 24px;
+  margin-left: 2px;
+}
+.storyvideo-dur {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  font-family: var(--fh);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: #ffffff;
+  background: rgba(10, 18, 9, .55);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+}
+
+.storyvideo-media:hover { box-shadow: 0 18px 44px rgba(24, 39, 27, .16); }
+.storyvideo-media:hover img { transform: scale(1.035); }
+.storyvideo-media:hover .storyvideo-play {
+  transform: translate(-50%, -50%) scale(1.07);
+  box-shadow: 0 8px 26px rgba(10, 18, 9, .34);
+}
+.storyvideo-media:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.storyvideo-body { padding: 22px 2px 0; }
+.storyvideo-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--fh);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.storyvideo-num {
+  color: var(--text-m);
+  font-variant-numeric: tabular-nums;
+  padding-right: 10px;
+  border-right: 1px solid rgba(24, 39, 27, .18);
+}
+.storyvideo-title {
+  font-family: var(--fh);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+  color: var(--text-h);
+  margin: 0 0 9px;
+}
+.storyvideo-text {
+  font-family: var(--fh);
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--text-p);
+  line-height: 1.65;
+}
+
+/* -- 43.4 Outcome grid -- */
+.outcome {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--canvas);
+  border: 1px solid rgba(184, 144, 42, .16);
+  border-radius: var(--radius-xl);
+  padding: 44px 48px;
+}
+.outcome-h3 {
+  font-family: var(--fh);
+  font-size: clamp(21px, 2.2vw, 27px);
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--text-h);
+  text-align: center;
+  margin: 0 0 32px;
+}
+.outcome-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px 40px;
+  padding: 0;
+  margin: 0;
+}
+.outcome-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.outcome-check {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  margin-top: 2px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(184, 144, 42, .13);
+  color: var(--gold);
+}
+.outcome-check svg { width: 13px; height: 13px; }
+.outcome-title {
+  font-family: var(--fh);
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-h);
+  margin: 0 0 5px;
+}
+.outcome-text {
+  font-family: var(--fh);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-m);
+  line-height: 1.6;
+}
+
+/* -- 43.5 Individual-results note -- */
+.cstory-note {
+  max-width: 820px;
+  margin: 34px auto 0;
+  font-family: var(--fh);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-m);
+  text-align: center;
+}
+
+/* -- 43.6 Compact secondary stories -- */
+.cstory-compact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+.cstory-compact {
+  background: var(--cream);
+  border: 1px solid rgba(184, 144, 42, .16);
+  border-radius: var(--radius-lg);
+  padding: 34px 34px 30px;
+}
+.cstory-compact-head {
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(184, 144, 42, .18);
+}
+.cstory-compact-name {
+  font-family: var(--fh);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--text-h);
+  margin: 0 0 4px;
+}
+.cstory-compact-role {
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-m);
+}
+.cstory-compact-block { margin-bottom: 18px; }
+.cstory-compact-block:last-child { margin-bottom: 0; }
+.cstory-compact-label {
+  font-family: var(--fh);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 7px;
+}
+.cstory-compact-text {
+  font-family: var(--fh);
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--text-p);
+  line-height: 1.65;
+}
+
+/* -- 43.7 Final-CTA reassurance line -- */
+.final-cta-note {
+  font-family: var(--fh);
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--tl);
+  opacity: .72;
+  line-height: 1.6;
+  max-width: 460px;
+  margin: 18px auto 0;
+}
+
+/* -- 43.8 Video lightbox -- */
+.vlb {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3vh 20px;
+}
+.vlb[hidden] { display: none; }
+.vlb-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 12, 7, .90);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  animation: vlbFade .28s var(--ease) both;
+}
+.vlb-dialog {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: vlbRise .34s var(--ease) both;
+}
+.vlb-close {
+  align-self: flex-end;
+  margin-bottom: 12px;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .22);
+  background: rgba(255, 255, 255, .08);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background .3s, border-color .3s;
+}
+.vlb-close:hover {
+  background: rgba(255, 255, 255, .16);
+  border-color: rgba(255, 255, 255, .42);
+}
+.vlb-close:focus-visible {
+  outline: 2px solid var(--gl);
+  outline-offset: 2px;
+}
+.vlb-close svg { width: 18px; height: 18px; }
+
+/* Height-first sizing: the box is fully determined before the video's
+   metadata arrives, so opening the lightbox shifts nothing. Portrait
+   9:16 source (the clips carry a -90° rotation matrix). */
+.vlb-video {
+  display: block;
+  height: min(78vh, calc(min(90vw, 430px) * 16 / 9));
+  width: auto;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius-lg);
+  background: #000000;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .55);
+}
+.vlb-caption {
+  margin: 16px 0 0;
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: .02em;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .72);
+  text-align: center;
+  max-width: 420px;
+}
+
+@keyframes vlbFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes vlbRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+body.vlb-open { overflow: hidden; }
+
+
+/* -- 43.9 Responsive -- */
+@media (max-width: 1024px) {
+  .storyvideo-grid { gap: 22px; margin-bottom: 54px; }
+  .storyvideo-body { padding-top: 18px; }
+  .storyvideo-title { font-size: 18.5px; }
+  .storyvideo-text { font-size: 14px; }
+  .outcome { padding: 38px 34px; }
+  .outcome-grid { gap: 24px 30px; }
+  .cstory-compact { padding: 30px 28px 26px; }
+}
+
+@media (max-width: 860px) {
+  .cstory-head { margin-bottom: 42px; }
+  /* Three 245px-wide columns would crowd both poster and copy here, but a
+     stacked single column leaves a tablet mostly empty — so the chapters
+     become rows instead: poster left, copy centred beside it. */
+  .storyvideo-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    max-width: 700px;
+    margin: 0 auto 50px;
+  }
+  .storyvideo {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 26px;
+    align-items: center;
+  }
+  .storyvideo-body { padding: 0; }
+  .cstory-compact-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+
+@media (max-width: 560px) {
+  /* Below tablet the row would squeeze the poster too small — back to a
+     full-width stack. */
+  .storyvideo-grid { max-width: 420px; gap: 38px; }
+  .storyvideo { display: flex; flex-direction: column; }
+  .storyvideo-body { padding: 22px 2px 0; }
+}
+
+@media (max-width: 768px) {
+  .mkt-hero-note { font-size: 13px; margin-bottom: 28px; }
+  .cstory-intro { font-size: 15px; }
+  .outcome {
+    padding: 32px 24px;
+    border-radius: var(--radius-lg);
+  }
+  .outcome-h3 { margin-bottom: 26px; }
+  .outcome-grid { grid-template-columns: 1fr; gap: 22px; }
+  .cstory-note { font-size: 12px; margin-top: 28px; }
+  .vlb { padding: 16px; }
+  .vlb-video { height: min(74vh, calc(min(88vw, 430px) * 16 / 9)); }
+  .vlb-caption { font-size: 12.5px; }
+}
+
+@media (max-width: 420px) {
+  .storyvideo-grid { gap: 34px; }
+  .storyvideo-play { width: 56px; height: 56px; }
+  .storyvideo-play svg { width: 21px; height: 21px; }
+  .storyvideo-title { font-size: 18px; }
+  .cstory-compact { padding: 26px 22px 24px; }
+  .cstory-compact-text { font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .storyvideo-media,
+  .storyvideo-media img,
+  .storyvideo-scrim,
+  .storyvideo-play { transition: none; }
+  .storyvideo-media:hover img { transform: none; }
+  .storyvideo-media:hover .storyvideo-play { transform: translate(-50%, -50%); }
+  .vlb-backdrop,
+  .vlb-dialog { animation: none; }
+}
