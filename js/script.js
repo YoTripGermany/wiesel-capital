@@ -682,6 +682,12 @@ initAutoCarousel(document.querySelector('#trust .trust-grid'), 28);
 
       if (res.ok) {
         showMsg('Danke! Bitte bestätigen Sie Ihre E-Mail-Adresse in Ihrem Postfach.', false);
+        // Hand the address to HubSpot as well (see section 25), so the
+        // browsing history collected up to here stops being anonymous.
+        // Klaviyo still owns the double opt-in — the contact exists in
+        // HubSpot from this moment, the subscription only after confirmation.
+        hsIdentify({ email: email });
+        hsTrack('newsletter_anmeldung', { seite: location.pathname });
         form.reset();
       } else {
         showMsg('Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.', true);
@@ -797,4 +803,99 @@ initAutoCarousel(document.querySelector('#reviews .review-track'), 24);
       stops[0].focus({ preventScroll: true });
     }
   }, true);
+})();
+
+/* ── 25. HUBSPOT TRACKING ──
+   The embed code in every page's <head> records page views, sessions and
+   traffic sources by itself. What it cannot see on a static site is
+   handled here:
+
+   • Who the visitor is. HubSpot keeps an anonymous browsing history per
+     cookie and only attaches it to a contact record once an e-mail address
+     reaches `identify` — from the newsletter form, or from the parameters
+     Calendly appends when it redirects to the confirmation page.
+   • What the visitor did. The Calendly CTA, the phone number and the mail
+     address all leave the site, so the click is the last thing observable
+     from here.
+
+   `_hsq` is a plain queue array that the loader drains once it arrives, so
+   every push below is safe before it has loaded — and harmless if an ad
+   blocker means it never does. Written as function declarations rather
+   than an IIFE so the newsletter handler further up the file can call in. */
+
+const HS_EVENT_PREFIX = 'pe149183646_';
+
+function hsQueue() {
+  return (window._hsq = window._hsq || []);
+}
+
+/* `identify` on its own is only buffered — HubSpot writes the properties to
+   the contact record with the next tracked hit, so one always follows. */
+function hsIdentify(props) {
+  if (!props || !props.email) return;
+  hsQueue().push(['identify', props]);
+  hsQueue().push(['trackPageView']);
+}
+
+/* Custom behavioural events need Marketing Hub Enterprise *and* an event of
+   the same internal name defined in the portal; anywhere else HubSpot drops
+   the call. The push itself costs nothing, so these stay in and start
+   reporting the moment those events exist. */
+function hsTrack(name, props) {
+  hsQueue().push(['trackCustomBehavioralEvent', {
+    name: HS_EVENT_PREFIX + name,
+    properties: props || {}
+  }]);
+}
+
+(function () {
+  /* Outbound CTAs. Delegated from the document, in the capture phase: the
+     same buttons are repeated across the nav, the mobile menu and several
+     sections, and the mobile copy closes the menu in its own onclick. */
+  document.addEventListener('click', function (e) {
+    const a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+
+    if (href.indexOf('calendly.com') > -1) {
+      hsTrack('termin_klick', { seite: location.pathname });
+    } else if (href.indexOf('mailto:') === 0) {
+      hsTrack('mail_klick', { seite: location.pathname });
+    } else if (href.indexOf('tel:') === 0) {
+      hsTrack('telefon_klick', { seite: location.pathname });
+    }
+  }, true);
+
+  /* Calendly redirects here after a booking and, with "Pass event details to
+     your redirect page" switched on, appends the invitee's details as query
+     parameters. That address is the one point where a booking can be tied to
+     the browsing history that led up to it. The page is publicly reachable,
+     so nothing happens without a plausible address in the URL. */
+  if (!document.body.classList.contains('page-danke')) return;
+
+  const q = new URLSearchParams(location.search);
+  const email = (q.get('invitee_email') || '').trim();
+  if (email.indexOf('@') < 1) return;
+
+  const name = (q.get('invitee_full_name') || '').trim();
+  const cut = name.lastIndexOf(' ');
+  const props = { email: email };
+  if (cut > 0) {
+    props.firstname = name.slice(0, cut);
+    props.lastname  = name.slice(cut + 1);
+  } else if (name) {
+    props.firstname = name;
+  }
+
+  hsIdentify(props);
+  hsTrack('termin_gebucht', {
+    event_type: q.get('event_type_name')  || '',
+    start:      q.get('event_start_time') || ''
+  });
+
+  /* Drop the parameters again once they have been read. Otherwise the
+     address sits in the browser history, in the referrer of whatever the
+     visitor clicks next, and in every analytics tool that reads
+     location.href. */
+  history.replaceState(null, '', location.pathname + location.hash);
 })();
