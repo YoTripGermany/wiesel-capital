@@ -722,20 +722,33 @@ initAutoCarousel(document.querySelector('#reviews .review-track'), 24);
     video.setAttribute('src', trigger.dataset.video);
     video.setAttribute('poster', trigger.querySelector('img').getAttribute('src'));
 
+    lb.removeAttribute('hidden');
+
+    // play() has to run while the tap that opened the lightbox still counts
+    // as the activating gesture, and on an element that is already in the
+    // render tree. iOS Safari drops that authorisation across intervening
+    // DOM work — focus() in particular — so playback starts here and the
+    // scroll lock and focus move happen afterwards.
+    const p = video.play();
+    if (p && typeof p.catch === 'function') {
+      p.catch(() => {
+        // Blocked anyway (Low Power Mode, per-site media settings). The
+        // poster and native controls are already on the element, so the
+        // visitor can start it by hand — just make sure the frame isn't
+        // left looking dead.
+        lb.classList.add('vlb-manual');
+      });
+    }
+
     // Compensate for the scrollbar the lock removes, so the page behind
     // the backdrop doesn't jump sideways.
     const gap = window.innerWidth - document.documentElement.clientWidth;
     if (gap > 0) document.body.style.paddingRight = gap + 'px';
     document.body.classList.add('vlb-open');
-
-    lb.removeAttribute('hidden');
     // preventScroll: focus() otherwise scrolls its target into view, which
     // nudges the page behind the backdrop and lands the visitor somewhere
     // else than where they clicked once the lightbox closes.
     closeBtn.focus({ preventScroll: true });
-    // Click on the poster is the user gesture, so sound is expected here.
-    const p = video.play();
-    if (p && typeof p.catch === 'function') p.catch(() => {});
   }
 
   function close() {
@@ -747,6 +760,7 @@ initAutoCarousel(document.querySelector('#reviews .review-track'), 24);
     caption.textContent = '';
 
     lb.setAttribute('hidden', '');
+    lb.classList.remove('vlb-manual');
     document.body.classList.remove('vlb-open');
     document.body.style.paddingRight = '';
 
