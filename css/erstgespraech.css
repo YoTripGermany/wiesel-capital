@@ -613,8 +613,10 @@
   .page-erstgespraech section[id],
   .page-erstgespraech div[id] { scroll-margin-top: 78px; }
 
-  .lp-hero { padding: 100px 0 40px; }
-  .lp-hero-eyebrow { font-size: 12px; padding: 7px 13px; margin-bottom: 20px; }
+  /* Mehr Luft unter der Kopfzeile (ca. 65px hoch) — vorher wirkte der
+     Einstieg gequetscht. */
+  .lp-hero { padding: 124px 0 40px; }
+  .lp-hero-eyebrow { font-size: 12px; padding: 7px 13px; margin-bottom: 24px; }
   .lp-hero-h1 { line-height: 1.1; margin-bottom: 16px; }
   .lp-hero-sub { font-size: 15.5px; }
   .lp-hero-head { margin-bottom: 28px; }
