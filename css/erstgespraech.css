@@ -1,0 +1,1102 @@
+/* ============================================================
+   WIESEL CAPITAL — LANDINGPAGE /erstgespraech
+   ============================================================
+   Ergänzung zu css/style.css, das unverändert bleibt. Alles hier
+   gilt ausschließlich für <body class="page-erstgespraech">:
+   Tokens, Buttons (.btn-p), Panels (.page-sec/.panel), Karten
+   (.pillar) und die Video-Lightbox (.vlb) kommen aus dem globalen
+   Design-System, hier stehen nur die Abweichungen und die beiden
+   neuen Komponenten (Video-Karte, Qualifizierung).
+
+   1. Seitenrahmen (Kopfzeile ohne Topbar)
+   2. Hero
+   3. Qualifikationsleiste
+   4. Video
+   5. Problem
+   6. Lösung (CTA-Wiederholung)
+   7. Für wen
+   8. Qualifizierung
+   9. Footer
+  10. Responsive
+  11. Reduzierte Bewegung
+  12. Vorqualifizierungs-Flow
+   ============================================================ */
+
+
+/* ── 1. SEITENRAHMEN ── */
+
+/* Die Landingpage hat keine Topbar, deshalb sitzt die Kopfzeile bündig
+   oben statt auf den 38px, die style.css für die übrigen Seiten reserviert. */
+.page-erstgespraech nav { top: 0; }
+.page-erstgespraech section[id],
+.page-erstgespraech div[id] { scroll-margin-top: 92px; }
+
+.page-erstgespraech .nav-bg { padding: 16px 0; }
+.page-erstgespraech nav.scrolled .nav-bg { padding: 11px 0; }
+
+
+
+/* ── 2. HERO ── */
+
+/* Zweiteilig: Die dunkle Bühne (.lp-hero-stage) trägt nur die obere Hälfte,
+   die helle Karte ragt über ihre Unterkante in den Cremegrund. Dadurch wirkt
+   der Einstieg hochwertig, ohne dass das Angebot im Dunkeln verschwindet. */
+.lp-hero {
+  position: relative;
+  padding: 146px 0 72px;
+  background: #ffffff;
+  /* Kein overflow:hidden — sonst wird der Schatten der Karte an der
+     Unterkante abgeschnitten. Die Bühne begrenzt ihren Schein selbst. */
+  isolation: isolate;
+  z-index: 1;
+}
+.lp-hero-stage {
+  position: absolute;
+  inset: 0 0 auto 0;
+  /* Endet etwa auf halber Kartenhöhe. */
+  height: calc(100% - 230px);
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 80% at 50% 0%, rgba(201, 168, 76, .16) 0%, rgba(201, 168, 76, 0) 62%),
+    linear-gradient(180deg, #0c170d 0%, #13241a 100%);
+}
+/* Feines Linienraster, zur Mitte hin ausgeblendet — gibt der Fläche Tiefe. */
+.lp-hero-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201, 168, 76, .07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201, 168, 76, .07) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(70% 90% at 50% 0%, #000 0%, transparent 75%);
+          mask-image: radial-gradient(70% 90% at 50% 0%, #000 0%, transparent 75%);
+}
+.lp-hero-glow {
+  position: absolute;
+  inset: -30% -10%;
+  background:
+    radial-gradient(30% 40% at 18% 40%, rgba(201, 168, 76, .14) 0%, rgba(201, 168, 76, 0) 70%),
+    radial-gradient(28% 36% at 84% 60%, rgba(201, 168, 76, .10) 0%, rgba(201, 168, 76, 0) 70%);
+  animation: lpDrift 20s ease-in-out infinite alternate;
+}
+
+.lp-hero-head {
+  max-width: 1000px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.lp-hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  margin-bottom: 26px;
+  border-radius: var(--radius-pill);
+  background: #ffffff;
+  box-shadow: 0 6px 22px rgba(10, 18, 9, .25);
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--text-h);
+}
+/* Grüner Pulspunkt wie in der Topbar der übrigen Seiten (style.css). */
+.lp-hero-dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #3ecf6e;
+  animation: topbarPulse 2s infinite;
+}
+
+.lp-hero-h1 {
+  font-family: var(--fh);
+  font-size: clamp(34px, 5vw, 62px);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.06;
+  color: #ffffff;
+  margin-bottom: 22px;
+  text-wrap: balance;
+}
+/* Zweite Zeile in der Serifenschrift der Marke, kursiv und in Gold. */
+.lp-hero-h1 em {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--fd);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.12em;
+  letter-spacing: -.01em;
+  line-height: 1.05;
+  background: var(--gold-text-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lp-hero-gold {
+  background: var(--gold-text-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lp-hero-sub {
+  font-family: var(--fh);
+  font-size: clamp(16px, 1.5vw, 18.5px);
+  font-weight: 400;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, .74);
+  max-width: 56ch;
+  margin: 0 auto;
+  text-wrap: pretty;
+}
+
+/* Angebotskarte: Video links, Nutzen und CTA rechts. */
+.lp-hero-card {
+  display: grid;
+  /* Das Video bekommt klar die größere Hälfte. */
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  /* Rechte Spalte als geschlossene Gruppe mittig zum Video. */
+  align-items: center;
+  gap: 40px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 40px 14px 14px;
+  background: #ffffff;
+  border: 1px solid rgba(184, 144, 42, .2);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 30px 70px rgba(10, 18, 9, .16), 0 2px 0 rgba(201, 168, 76, .5) inset;
+}
+
+.lp-hero-media { position: relative; }
+
+/* Inline-Player im 16:9-Format des Videos. Das Standbild liegt als
+   Schaltfläche darüber und wird beim Start ausgeblendet. */
+.lp-herovideo {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: calc(var(--radius-xl) - 10px);
+  overflow: hidden;
+  background: #0c170d;
+  /* Safari: abgerundete Ecken auch während der Videowiedergabe. */
+  isolation: isolate;
+}
+.lp-herovideo-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #0c170d;
+}
+.lp-herovideo-video:focus { outline: none; }
+
+.lp-herovideo-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity .35s var(--ease), visibility 0s linear .35s;
+}
+.lp-herovideo-cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .8s var(--ease);
+}
+.lp-herovideo-cover:hover img { transform: scale(1.03); }
+.lp-herovideo-cover:focus-visible { outline: 3px solid var(--gl); outline-offset: -3px; }
+
+.lp-herovideo.is-playing .lp-herovideo-cover {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.lp-herovideo-scrim {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(40% 50% at 50% 50%, rgba(10, 18, 9, .18) 0%, rgba(10, 18, 9, 0) 100%),
+    linear-gradient(180deg, rgba(10, 18, 9, 0) 55%, rgba(10, 18, 9, .78) 100%);
+}
+
+.lp-herovideo-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #c9a84c, #a8832a);
+  color: #ffffff;
+  box-shadow: 0 12px 40px rgba(10, 18, 9, .4);
+  transition: transform .45s var(--ease), box-shadow .45s var(--ease);
+}
+.lp-herovideo-play svg { width: 34px; height: 34px; margin-left: 4px; }
+
+/* Ruhiger Puls statt Blinken — ein Hinweis, kein Effekt. */
+.lp-herovideo-ring {
+  position: absolute;
+  inset: -14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .7);
+  animation: lpPuls 3.2s var(--ease) infinite;
+}
+@keyframes lpPuls {
+  0%   { transform: scale(.94); opacity: .8; }
+  70%  { transform: scale(1.18); opacity: 0; }
+  100% { transform: scale(1.18); opacity: 0; }
+}
+.lp-herovideo-cover:hover .lp-herovideo-play {
+  transform: scale(1.08);
+  box-shadow: 0 16px 48px rgba(10, 18, 9, .5);
+}
+
+.lp-herovideo-label {
+  position: absolute;
+  left: 22px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+  text-shadow: 0 1px 12px rgba(10, 18, 9, .6);
+}
+.lp-herovideo-name {
+  font-family: var(--fh);
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.lp-herovideo-role {
+  font-family: var(--fh);
+  font-size: 12.5px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, .8);
+}
+
+.lp-hero-offer {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 8px 0;
+}
+.lp-offer-h {
+  font-family: var(--fh);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.015em;
+  line-height: 1.2;
+  color: var(--text-h);
+  margin: 0 0 18px;
+}
+.lp-offer-list {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+}
+.lp-offer-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-family: var(--fh);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-p);
+}
+.lp-offer-list strong { font-weight: 700; color: var(--text-h); }
+.lp-offer-list .lp-check { width: 24px; height: 24px; margin-top: 0; }
+.lp-offer-list .lp-check svg { width: 12px; height: 12px; }
+
+
+.lp-cta { padding: 18px 34px; font-size: 15px; }
+.lp-hero-offer .lp-cta {
+  width: 100%;
+  justify-content: center;
+  padding: 19px 28px;
+  font-size: 15.5px;
+  box-shadow: 0 12px 30px rgba(184, 144, 42, .3);
+}
+.lp-cta-arrow {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  transition: transform .3s var(--ease);
+}
+.lp-cta:hover .lp-cta-arrow { transform: translateX(3px); }
+
+
+
+/* ── 3. TRUST ──
+   Boxen, Mobil-Laufband und Zertifikat-Lightbox kommen unverändert aus
+   style.css (#trust). Weißer Grund wie auf der Startseite und wie der
+   untere Teil des Heros — die Boxen heben sich nur über Linie und
+   Schatten ab, nicht über eine zweite Fläche. */
+.page-erstgespraech #trust {
+  background: #ffffff;
+  border-bottom: 0;
+  padding: 8px 0 88px;
+}
+
+
+/* ── 4. VIDEO ── */
+
+/* Langsam wandernder Goldschein hinter der Sektion. Niedrige Deckkraft und
+   22 Sekunden Dauer: als Bewegung wahrnehmbar, ohne vom Text abzulenken. */
+.lp-video-panel { position: relative; overflow: hidden; }
+.lp-video-glow {
+  position: absolute;
+  inset: -20% -15%;
+  pointer-events: none;
+  background:
+    radial-gradient(42% 46% at 24% 32%, rgba(201, 168, 76, .15) 0%, rgba(201, 168, 76, 0) 70%),
+    radial-gradient(38% 40% at 78% 68%, rgba(201, 168, 76, .09) 0%, rgba(201, 168, 76, 0) 70%);
+  animation: lpDrift 22s ease-in-out infinite alternate;
+}
+@keyframes lpDrift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1); }
+  to   { transform: translate3d(5%, 3%, 0) scale(1.12); }
+}
+
+.lp-video-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 52px;
+  max-width: 1020px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.lp-video-figure { margin: 0; }
+.lp-video-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .34);
+  /* Kommt beim Einblenden minimal zur Ruhe. */
+  transform: scale(1.045);
+  transition: transform 1.6s var(--ease);
+}
+.lp-video-figure.on img { transform: scale(1); }
+
+
+.lp-video-lead {
+  font-family: var(--fh);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--tl);
+  margin-bottom: 22px;
+}
+.lp-video-points {
+  position: relative;
+  list-style: none;
+  display: grid;
+  gap: 15px;
+  padding-left: 24px;
+}
+/* Die Linie zeichnet sich beim Reinscrollen von oben nach unten auf. */
+.lp-video-points::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: .5em;
+  bottom: .5em;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(201, 168, 76, .85) 0%, rgba(201, 168, 76, .08) 100%);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1.2s var(--ease) .15s;
+}
+.fade.on .lp-video-points::after { transform: scaleY(1); }
+
+.lp-video-points li {
+  position: relative;
+  font-family: var(--fh);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, .82);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.fade.on .lp-video-points li { opacity: 1; transform: none; }
+.fade.on .lp-video-points li:nth-child(1) { transition-delay: .30s; }
+.fade.on .lp-video-points li:nth-child(2) { transition-delay: .45s; }
+.fade.on .lp-video-points li:nth-child(3) { transition-delay: .60s; }
+.fade.on .lp-video-points li:nth-child(4) { transition-delay: .75s; }
+.lp-video-points li::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: .58em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gl);
+  box-shadow: 0 0 0 4px rgba(201, 168, 76, .12);
+}
+
+
+
+/* ── 5. PROBLEM ── */
+
+.lp-problems {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  list-style: none;
+  max-width: 940px;
+  margin: 0 auto;
+}
+.lp-problem {
+  position: relative;
+  padding: 30px 30px 28px;
+  background: #ffffff;
+  border: 1px solid rgba(184, 144, 42, .16);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 4px 22px rgba(24, 39, 27, .04);
+}
+.lp-problem-num {
+  display: block;
+  font-family: var(--fh);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: #8a6b1f;
+  margin-bottom: 12px;
+}
+.lp-problem-h {
+  font-family: var(--fh);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  line-height: 1.35;
+  color: var(--text-h);
+  margin-bottom: 7px;
+}
+.lp-problem-p {
+  font-family: var(--fh);
+  font-size: 14.5px;
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--text-p);
+}
+
+
+/* ── 6. LÖSUNG ── */
+
+/* .pillar-p reserviert global 98px Mindesthöhe für die Startseiten-Kacheln;
+   hier tragen die drei Säulen kürzere Texte. */
+.page-erstgespraech .pillar-p { min-height: 0; }
+
+.lp-midcta { text-align: center; margin-top: 46px; }
+
+
+/* ── 7. FÜR WEN ── */
+
+/* Eine Spalte statt zwei: Die Liste wird zur Checkliste, die man von oben
+   nach unten durchgeht und bei der jede Zeile einzeln zutrifft. */
+.lp-fits {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  list-style: none;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 8px 30px;
+  background: #ffffff;
+  border: 1px solid rgba(184, 144, 42, .18);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 34px rgba(24, 39, 27, .06);
+}
+.lp-fit {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 17px 0;
+  font-family: var(--fh);
+  font-size: 16.5px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-p);
+}
+.lp-fit + .lp-fit { border-top: 1px solid rgba(184, 144, 42, .14); }
+.lp-fit-text strong { font-weight: 700; color: var(--text-h); }
+.lp-check {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #c9a84c, #a8832a);
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(184, 144, 42, .28);
+}
+.lp-check svg { width: 14px; height: 14px; }
+
+.lp-fits-cta { text-align: center; margin-top: 40px; }
+
+
+/* ── 8. QUALIFIZIERUNG ── */
+
+.qform { max-width: 780px; margin: 0 auto; text-align: center; }
+
+/* Mount-Punkt des späteren Multi-Step-Formulars. Höhe bewusst ungesetzt,
+   damit beim Einblenden nichts springt, was vorher Platz belegt hätte. */
+.qform-mount { text-align: left; }
+
+
+/* ── 9. FOOTER ── */
+
+.lp-footer { padding: 40px 0 36px; }
+.lp-footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+}
+.lp-footer .footer-logo-img { margin-bottom: 0; }
+/* Die globale .footer-copy-Regel bleibt unverändert; hier nur angehoben,
+   weil 11px in --tm auf --dark bei 3,91:1 liegen. */
+.lp-footer .footer-copy { margin-right: auto; color: rgba(206, 197, 173, .72); }
+.lp-footer .footer-links a { color: rgba(206, 197, 173, .72); }
+.lp-footer .footer-links a:hover { color: var(--gl); }
+
+
+/* ── 10. RESPONSIVE ── */
+
+@media (max-width: 1024px) {
+  .lp-hero { padding: 132px 0 60px; }
+  .lp-hero-card { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 28px; padding-right: 28px; }
+  .lp-video-shell { gap: 38px; }
+}
+
+@media (max-width: 900px) {
+  /* Ab hier einspaltig: erst die Aussage, dann das Bild — der CTA bleibt
+     so auf dem Telefon im ersten Bildschirm. */
+  .lp-hero { padding: 118px 0 48px; }
+  .lp-hero-head { margin-bottom: 36px; }
+  .lp-hero-stage { height: calc(100% - 520px); }
+  .lp-hero-card { grid-template-columns: 1fr; gap: 8px; padding: 12px 12px 24px; max-width: 680px; }
+  .lp-hero-offer { padding: 18px 12px 0; gap: 24px; }
+  .lp-video-shell { grid-template-columns: 1fr; gap: 30px; }
+}
+
+
+@media (max-width: 768px) {
+  .page-erstgespraech section[id],
+  .page-erstgespraech div[id] { scroll-margin-top: 78px; }
+
+  .lp-hero { padding: 100px 0 40px; }
+  .lp-hero-eyebrow { font-size: 12px; padding: 7px 13px; margin-bottom: 20px; }
+  .lp-hero-h1 { line-height: 1.1; margin-bottom: 16px; }
+  .lp-hero-sub { font-size: 15.5px; }
+  .lp-hero-head { margin-bottom: 28px; }
+  .lp-hero-stage { height: calc(100% - 470px); }
+  .lp-cta { width: 100%; justify-content: center; text-align: center; }
+  .page-erstgespraech #trust { padding-bottom: 60px; }
+  /* Laufband bis an den Bildschirmrand statt am Inhaltsrand abgeschnitten;
+     die erste Karte startet trotzdem bündig mit dem Text darüber. */
+  .page-erstgespraech #trust .trust-grid {
+    margin: -4px -20px -6px;
+    padding: 4px 20px 6px;
+    scroll-padding-left: 20px;
+  }
+
+  .lp-herovideo-play { width: 66px; height: 66px; margin: -33px 0 0 -33px; }
+  .lp-herovideo-play svg { width: 26px; height: 26px; }
+  .lp-herovideo-label { left: 16px; bottom: 12px; }
+  .lp-herovideo-name { font-size: 13.5px; }
+  .lp-herovideo-role { font-size: 11.5px; }
+
+  .lp-problems { grid-template-columns: 1fr; gap: 14px; }
+  .lp-problem { padding: 24px 22px 22px; }
+
+  .lp-midcta .lp-cta { width: 100%; }
+
+  .lp-fits { padding: 4px 20px; }
+  .lp-fit { font-size: 15.5px; gap: 13px; padding: 15px 0; }
+  .lp-fits-cta .lp-cta { width: 100%; }
+
+  .lp-footer-inner { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .lp-footer .footer-copy { margin-right: 0; }
+}
+
+@media (max-width: 420px) {
+  .lp-herovideo-play { width: 58px; height: 58px; margin: -29px 0 0 -29px; }
+  .lp-herovideo-play svg { width: 23px; height: 23px; }
+  .lp-hero-offer { padding: 14px 6px 0; }
+  .lp-fit { font-size: 15px; }
+}
+
+
+/* ── 11. REDUZIERTE BEWEGUNG ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-herovideo-cover,
+  .lp-herovideo-cover img,
+  .lp-herovideo-play,
+  .lp-video-figure img,
+  .lp-video-points li { transition: none; }
+  .lp-herovideo-ring,
+  .lp-hero-glow,
+  .lp-video-glow { animation: none; }
+  .lp-video-figure img { transform: none; }
+  .lp-video-points li { opacity: 1; transform: none; }
+  .lp-video-points::after { transform: scaleY(1); transition: none; }
+}
+
+
+/* ── 12. VORQUALIFIZIERUNGS-FLOW ──
+   Wird von QualificationForm (js/erstgespraech.js) in #qformMount gerendert
+   und steht auf /erstgespraech-anfrage auf hellem Grund: Die Fragen sitzen
+   in einer weißen Karte, daneben der Grund für die Eingabe (Abschnitt 13).
+   Den Fortschritt trägt die Linie in der Kopfzeile, nicht der Schritt. */
+
+.qform {
+  max-width: 560px;
+  background: #ffffff;
+  border: 1px solid rgba(184, 144, 42, .18);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 18px 50px rgba(24, 39, 27, .08);
+  padding: 40px 40px 36px;
+}
+
+.qf-frage {
+  font-family: var(--fh);
+  font-size: clamp(22px, 2.4vw, 27px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.25;
+  color: var(--text-h);
+  text-align: center;
+  margin-bottom: 26px;
+  text-wrap: balance;
+}
+
+/* Kopf der Box: Zurück | Schritt x von 4, darunter die Segmente. */
+.qf-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 24px;
+  margin-bottom: 12px;
+}
+.qf-steplabel {
+  font-family: var(--fh);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--text-m);
+}
+.qf-segs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 34px;
+}
+.qf-seg {
+  position: relative;
+  height: 4px;
+  border-radius: 4px;
+  background: rgba(184, 144, 42, .16);
+  overflow: hidden;
+}
+.qf-seg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #c9a84c, #a8832a);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+.qf-seg.is-done::after { transform: scaleX(1); }
+/* Nur das gerade erreichte Segment füllt sich sichtbar. */
+.qf-seg.is-done:not(:has(+ .qf-seg.is-done))::after { animation: qfFill .6s var(--ease); }
+@keyframes qfFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Sanfter Einstieg in jeden Schritt. */
+.qf-body { animation: qfIn .45s var(--ease); }
+@keyframes qfIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+/* Gold wie die Hervorhebungen im Hero (für hellen Grund). */
+.qf-gold {
+  font-style: normal;
+  color: #8a6b1f;
+  background: var(--gold-text-gradient-cream);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.qf-frage:focus { outline: none; }
+/* Der Fokus auf der Frage ist nur für Screenreader da (Schrittwechsel
+   ansagen) — die Überschrift ist nicht bedienbar, also kein Rahmen. */
+.qf-frage:focus-visible { outline: none; }
+
+.qf-fields { display: grid; gap: 16px; text-align: left; }
+.qf-fields--zwei { grid-template-columns: 1fr 1fr; }
+
+.qf-label {
+  display: block;
+  margin-bottom: 7px;
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-p);
+}
+.qf-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(184, 144, 42, .34);
+  border-radius: var(--radius-md);
+  background: #fdfcf9;
+  font-family: var(--fh);
+  /* 16px verhindert, dass iOS beim Fokus in das Feld hineinzoomt. */
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-h);
+  transition: border-color .25s var(--ease), background .25s var(--ease);
+}
+.qf-input:hover { border-color: rgba(184, 144, 42, .55); }
+.qf-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: #ffffff;
+}
+.qf-input:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.qf-input.is-invalid { border-color: #b0442c; background: #fdf6f4; }
+
+.qf-error {
+  margin-top: 7px;
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #a03a23;
+}
+
+.qf-hint {
+  margin-top: 18px;
+  font-family: var(--fh);
+  font-size: 12.5px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-m);
+  text-align: left;
+}
+.qf-hint a { color: var(--text-p); text-decoration: underline; text-underline-offset: 2px; }
+.qf-hint a:hover { color: var(--gold); }
+
+/* Auswahlflächen: echte Radios, nur unsichtbar gemacht — Pfeiltasten,
+   Screenreader und Formularsemantik bleiben damit erhalten. */
+.qf-choices { display: grid; gap: 9px; text-align: left; }
+.qf-choice { display: block; cursor: pointer; }
+.qf-choice-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.qf-choice-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  border: 1px solid rgba(184, 144, 42, .24);
+  border-radius: var(--radius-md);
+  background: #fdfcf9;
+  transition: border-color .25s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease);
+}
+.qf-choice:hover .qf-choice-body {
+  border-color: rgba(184, 144, 42, .55);
+  background: #ffffff;
+  box-shadow: 0 4px 14px rgba(24, 39, 27, .06);
+}
+.qf-choice-input:focus-visible + .qf-choice-body { outline: 2px solid var(--gold); outline-offset: 3px; }
+.qf-choice-input:checked + .qf-choice-body {
+  border-color: var(--gold);
+  background: rgba(184, 144, 42, .1);
+  box-shadow: 0 4px 14px rgba(184, 144, 42, .14);
+}
+.qf-choice-label {
+  font-family: var(--fh);
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+.qf-choice-mark {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(184, 144, 42, .42);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: transparent;
+  background: #ffffff;
+  transition: border-color .25s var(--ease), background .25s var(--ease), color .25s var(--ease);
+}
+.qf-choice-mark svg { width: 12px; height: 12px; }
+.qf-choice-input:checked + .qf-choice-body .qf-choice-mark {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #c9a84c, #a8832a);
+  color: #ffffff;
+}
+
+.qf-actions {
+  display: flex;
+  margin-top: 30px;
+}
+.qf-next { padding: 16px 34px; }
+.qf-actions .qf-next {
+  width: 100%;
+  justify-content: center;
+  padding: 18px 28px;
+  font-size: 15.5px;
+  box-shadow: 0 10px 26px rgba(184, 144, 42, .26);
+}
+.qf-next-arrow {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  transition: transform .3s var(--ease);
+}
+.qf-next:hover .qf-next-arrow { transform: translateX(3px); }
+.qf-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-m);
+  cursor: pointer;
+  transition: color .25s var(--ease);
+}
+.qf-back:hover { color: var(--text-h); }
+.qf-back svg { width: 14px; height: 14px; }
+
+/* Lade-, Fehler- und Abschlussansicht */
+.qf-status { text-align: center; padding: 14px 0 6px; }
+.qf-status-text {
+  font-family: var(--fh);
+  font-size: 15.5px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-p);
+  max-width: 46ch;
+  margin: 0 auto;
+}
+.qf-status--fehler .qf-next,
+.qf-status--danke .qf-next { margin-top: 26px; }
+
+.qf-spinner {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 22px;
+  border: 2px solid rgba(184, 144, 42, .22);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: qfSpin .9s linear infinite;
+}
+@keyframes qfSpin { to { transform: rotate(360deg); } }
+
+.qf-status-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin-top: 26px;
+}
+.qf-status-actions .qf-next { margin-top: 0; }
+.qf-linkbtn {
+  font-family: var(--fh);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-p);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color .25s var(--ease);
+}
+.qf-linkbtn:hover { color: var(--gold); }
+
+/* Terminbuchung */
+.qf-termin-sub {
+  font-family: var(--fh);
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-p);
+  text-align: center;
+  max-width: 46ch;
+  margin: -12px auto 26px;
+}
+.qf-embed {
+  border: 1px solid rgba(184, 144, 42, .2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  /* Der Scheduler bringt sein eigenes Theme mit. */
+  background: transparent;
+}
+.qf-embed iframe {
+  display: block;
+  width: 100%;
+  height: 720px;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .qform { padding: 28px 22px 26px; border-radius: var(--radius-lg); }
+  .qf-fields--zwei { grid-template-columns: 1fr; }
+  .qf-frage { margin-bottom: 22px; }
+  .qf-actions { margin-top: 24px; }
+  .qf-next { flex: 1; justify-content: center; padding: 16px 24px; }
+  .qf-segs { margin-bottom: 26px; }
+  .qf-embed iframe { height: 640px; }
+}
+
+
+
+@media (prefers-reduced-motion: reduce) {
+  .qf-input,
+  .qf-choice-body,
+  .qf-choice-mark { transition: none; }
+  .qf-spinner { animation: none; border-top-color: var(--gold); }
+  .qf-body,
+  .qf-seg::after { animation: none !important; }
+}
+
+
+/* ── 13. ANFRAGESEITE /erstgespraech-anfrage ──
+   Ein Ziel, eine Box: kleines Logo oben, darunter mittig die Fragen,
+   darunter der Vertraulichkeitshinweis. Keine Spalte daneben, auch auf
+   dem Telefon steht nur die Box. */
+
+.page-anfrage {
+  background:
+    radial-gradient(70% 55% at 50% 0%, rgba(201, 168, 76, .10) 0%, rgba(201, 168, 76, 0) 62%),
+    linear-gradient(180deg, #ffffff 0%, var(--canvas) 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Kopfzeile: nicht fixiert, ohne Balken, Logo mittig. */
+.page-anfrage nav { position: absolute; }
+.page-anfrage .nav-bg,
+.page-anfrage nav.scrolled .nav-bg {
+  background: transparent;
+  border-bottom: 0;
+  box-shadow: none;
+  padding: 26px 0 0;
+}
+.page-anfrage .nav-inner { justify-content: center; }
+.page-anfrage .logo-img,
+.page-anfrage nav.scrolled .logo-img { height: 26px; top: 0; }
+
+.qa-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 104px 0 56px;
+}
+.qa-main > .container { width: 100%; }
+
+.qa-shell {
+  max-width: 560px;
+  margin: 0 auto;
+}
+/* Terminauswahl: Der Kalender bekommt mehr Breite. */
+.qa-shell.is-breit { max-width: 900px; }
+.qa-shell.is-breit .qform { max-width: none; }
+.qa-shell.is-breit .qa-safe { display: none; }
+
+.qa-safe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 18px;
+  font-family: var(--fh);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text-m);
+}
+.qa-safe svg { width: 14px; height: 14px; flex: 0 0 auto; }
+
+/* Footer auf dieser Seite hell und schlank. */
+.page-anfrage .lp-footer {
+  background: transparent;
+  border-top: 1px solid rgba(184, 144, 42, .18);
+  padding: 22px 0 26px;
+}
+.page-anfrage .lp-footer .footer-copy,
+.page-anfrage .lp-footer .footer-links a { color: var(--text-m); }
+.page-anfrage .lp-footer .footer-links a:hover { color: var(--gold); }
+.page-anfrage .lp-footer .footer-logo-img { display: none; }
+
+.qa-noscript { text-align: center; max-width: 560px; margin: 0 auto; }
+.qa-noscript-h {
+  font-family: var(--fh);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  color: var(--text-h);
+  margin-bottom: 14px;
+}
+.qa-noscript-p {
+  font-family: var(--fh);
+  font-size: 15.5px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--text-p);
+  margin-bottom: 26px;
+}
+
+@media (max-width: 768px) {
+  .page-anfrage .nav-bg,
+  .page-anfrage nav.scrolled .nav-bg { padding-top: 20px; }
+  .page-anfrage .logo-img,
+  .page-anfrage nav.scrolled .logo-img { height: 22px; }
+  /* Oben statt mittig: Die Tastatur schiebt sonst die Box hin und her. */
+  .qa-main { align-items: flex-start; padding: 70px 0 32px; }
+  .page-anfrage .lp-footer-inner { align-items: center; text-align: center; }
+}
