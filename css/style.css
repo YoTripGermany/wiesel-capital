@@ -57,8 +57,13 @@ body {
   font-family: var(--fb);
   background: var(--dg);
   color: var(--text-h);
+  /* clip statt hidden: schneidet seitlichen Überstand genauso ab, macht
+     body aber nicht zum eigenen Scrollbereich. hidden zusammen mit
+     overscroll-behavior hat auf Mobilgeräten das Scrollen per Wischgeste
+     komplett blockiert. hidden bleibt nur als Rückfall für Browser ohne
+     clip (vor iOS 16). overscroll-behavior sitzt deshalb nur auf html. */
   overflow-x: hidden;
-  overscroll-behavior-y: none;
+  overflow-x: clip;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
