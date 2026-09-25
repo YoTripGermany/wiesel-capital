@@ -47,7 +47,7 @@ const WC_CONFIG = {
     /* Einzige Terminstrecke dieser Landingpage. Bewusst ohne Ausweichweg:
        Lädt der Scheduler nicht, zeigt der Flow eine Fehleransicht mit
        „Erneut laden“ und dem direkten Link — kein stiller Wechsel auf
-       Calendly. Die Calendly-Links der übrigen Seiten bleiben unberührt. */
+       Calendly. Alle Terminbuttons der Website führen hierher. */
     hubspotUrl: 'https://meetings-eu1.hubspot.com/wiesel-capital/erstgesprach'
   },
 

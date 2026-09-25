@@ -814,9 +814,8 @@ initAutoCarousel(document.querySelector('#reviews .review-track'), 24);
      cookie and only attaches it to a contact record once an e-mail address
      reaches `identify` — from the newsletter form, or from the parameters
      Calendly appends when it redirects to the confirmation page.
-   • What the visitor did. The Calendly CTA, the phone number and the mail
-     address all leave the site, so the click is the last thing observable
-     from here.
+   • What the visitor did. Clicks on the booking CTAs (now leading to
+     /erstgespraech), the phone number and the mail address.
 
    `_hsq` is a plain queue array that the loader drains once it arrives, so
    every push below is safe before it has loaded — and harmless if an ad
@@ -857,7 +856,10 @@ function hsTrack(name, props) {
     if (!a) return;
     const href = a.getAttribute('href') || '';
 
-    if (href.indexOf('calendly.com') > -1) {
+    /* Terminbuttons führen seit der Umstellung von Calendly auf die eigene
+       Strecke /erstgespraech → /erstgespraech-anfrage (HubSpot-Formular
+       und -Kalender). calendly.com bleibt als Treffer für alte Links. */
+    if (/(^|\/)erstgespraech(-anfrage)?(\.html)?([?#]|$)/.test(href) || href.indexOf('calendly.com') > -1) {
       hsTrack('termin_klick', { seite: location.pathname });
     } else if (href.indexOf('mailto:') === 0) {
       hsTrack('mail_klick', { seite: location.pathname });
