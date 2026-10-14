@@ -4191,3 +4191,196 @@ body.vlb-open { overflow: hidden; }
   .vlb-backdrop,
   .vlb-dialog { animation: none; }
 }
+
+
+/* ============================================================
+   COOKIE-EINWILLIGUNG (js/consent.js)
+   ============================================================
+   Dunkelgrüne Karte mit goldener Kante — wie die Trust-Boxen, nur
+   invertiert. „Nur notwendige“ und „Alle akzeptieren“ sind gleich groß
+   und stehen nebeneinander: Ablehnen muss so leicht sein wie Zustimmen. */
+
+.cc {
+  position: fixed;
+  /* Rechts statt links: links unten sitzen auf mehreren Seiten die
+     Hero-Buttons, rechts nur Bilder. */
+  right: 24px;
+  bottom: 24px;
+  z-index: 3000;
+  width: min(460px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  border-radius: var(--radius-lg);
+  background: #0f1c12;
+  box-shadow: 0 24px 60px rgba(10, 18, 9, .38), 0 0 0 1px rgba(201, 168, 76, .22);
+  animation: ccIn .45s var(--ease);
+}
+.cc[hidden] { display: none; }
+.cc::before {
+  content: '';
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 3px;
+  background: var(--gold-text-gradient);
+}
+@keyframes ccIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.cc-box { padding: 22px 24px 18px; }
+
+.cc-h {
+  font-family: var(--fh);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+.cc-p {
+  font-family: var(--fb);
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--tl);
+  margin-bottom: 16px;
+}
+.cc-p a { color: var(--gl); text-decoration: underline; text-underline-offset: 2px; }
+.cc-p a:hover { color: #ffffff; }
+
+.cc-details { display: grid; gap: 10px; margin-bottom: 16px; }
+.cc-details[hidden] { display: none; }
+.cc-opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid rgba(201, 168, 76, .18);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, .03);
+  cursor: pointer;
+}
+.cc-opt-text {
+  font-family: var(--fb);
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--tl);
+}
+.cc-opt-text strong {
+  display: block;
+  font-family: var(--fh);
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+/* Echter Checkbox-Input, als Schalter gestaltet — Tastatur und
+   Screenreader funktionieren wie gewohnt. */
+.cc-switch {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 auto;
+  position: relative;
+  width: 38px;
+  height: 22px;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .18);
+  cursor: pointer;
+  transition: background .25s var(--ease);
+}
+.cc-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform .25s var(--ease);
+}
+.cc-switch:checked { background: linear-gradient(135deg, #c9a84c, #a8832a); }
+.cc-switch:checked::after { transform: translateX(16px); }
+.cc-switch:disabled { opacity: .55; cursor: default; }
+.cc-switch:focus-visible { outline: 2px solid var(--gl); outline-offset: 2px; }
+
+.cc-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.cc-btn {
+  min-height: 46px;
+  padding: 12px 14px;
+  border-radius: var(--radius-pill);
+  font-family: var(--fh);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+}
+.cc-btn:hover { transform: translateY(-1px); }
+.cc-btn:focus-visible { outline: 2px solid var(--gl); outline-offset: 3px; }
+.cc-btn--pri {
+  border: 0;
+  background: linear-gradient(135deg, #c9a84c, #a8832a);
+  color: #ffffff;
+}
+.cc-btn--pri:hover { box-shadow: 0 8px 22px rgba(201, 168, 76, .35); }
+.cc-btn--sec {
+  border: 1px solid rgba(255, 255, 255, .55);
+  background: transparent;
+  color: #ffffff;
+}
+.cc-btn--sec:hover { border-color: #ffffff; background: rgba(255, 255, 255, .06); }
+
+.cc-link {
+  display: block;
+  margin: 12px auto 0;
+  padding: 4px 6px;
+  border: 0;
+  background: none;
+  font-family: var(--fh);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tl);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.cc-link:hover { color: #ffffff; }
+.cc-link:focus-visible { outline: 2px solid var(--gl); outline-offset: 2px; }
+/* In der Detailansicht ist „Auswahl speichern“ ein vollwertiger Button. */
+.cc.is-details .cc-link {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid rgba(201, 168, 76, .55);
+  border-radius: var(--radius-pill);
+  color: var(--gl);
+  font-weight: 600;
+  text-decoration: none;
+}
+.cc.is-details .cc-link:hover { color: #ffffff; border-color: var(--gl); }
+
+@media (max-width: 600px) {
+  .cc {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-height: calc(100vh - 24px);
+  }
+  .cc-box { padding: 18px 18px 14px; }
+  .cc-p { font-size: 13.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc { animation: none; }
+  .cc-switch, .cc-switch::after, .cc-btn { transition: none; }
+}
