@@ -1,2 +1,4 @@
 .DS_Store
 .cs-wizard/
+node_modules/
+.env

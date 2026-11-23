@@ -1,0 +1,20 @@
+{
+  "name": "wiesel-capital-website",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wiesel Capital – Website mit Blog (statische Seiten + Node-Server für /blog und /admin)",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "compression": "^1.8.2",
+    "express": "^5.3.0",
+    "pg": "^8.23.1",
+    "sanitize-html": "^2.18.2"
+  }
+}

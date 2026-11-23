@@ -123,7 +123,7 @@
         '<p class="cc-h" id="cc-h">Cookies &amp; Datenschutz</p>' +
         '<p class="cc-p" id="cc-p">Wir verwenden Cookies und ähnliche Technologien. Technisch notwendige sorgen dafür, dass die Website funktioniert. ' +
           'Mit Ihrer Einwilligung nutzen wir zusätzlich Statistik-Dienste (HubSpot, Contentsquare) und das Meta-Pixel für Marketing; dabei können Daten auch in die USA übermittelt werden. ' +
-          'Ihre Auswahl können Sie jederzeit unter „Cookie-Einstellungen“ im Seitenfuß ändern. Mehr dazu in der <a href="datenschutz">Datenschutzerklärung</a>.</p>' +
+          'Ihre Auswahl können Sie jederzeit unter „Cookie-Einstellungen“ im Seitenfuß ändern. Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.</p>' +
         '<div class="cc-details" hidden>' +
           '<label class="cc-opt">' +
             '<input type="checkbox" class="cc-switch" checked disabled/>' +
